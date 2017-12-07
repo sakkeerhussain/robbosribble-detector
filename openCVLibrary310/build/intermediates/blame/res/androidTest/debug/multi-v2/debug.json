@@ -3,6 +3,10 @@
         {
             "outputFile": "/Users/sakkeer/projects/Android/ChessDetect/openCVLibrary310/build/intermediates/res/merged/androidTest/debug/values_values.arsc.flat",
             "map": []
+        },
+        {
+            "outputFile": "/Users/sakkeer/projects/Android/BallDetector/openCVLibrary310/build/intermediates/res/merged/androidTest/debug/values_values.arsc.flat",
+            "map": []
         }
     ]
 }

@@ -19,8 +19,7 @@ public class MyServer extends NanoHTTPD {
 
     @Override
     public Response serve(IHTTPSession session) {
-        String msg = "<html><body><h1>Hello server</h1>\n";
-        msg += "<p>We serve " + session.getUri() + " !</p>";
-        return newFixedLengthResponse( msg + "</body></html>\n" );
+        String response = ServerManager.get().processExtRequest(session);
+        return newFixedLengthResponse( response );
     }
 }
