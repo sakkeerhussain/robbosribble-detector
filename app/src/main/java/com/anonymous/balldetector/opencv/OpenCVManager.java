@@ -1,14 +1,18 @@
 package com.anonymous.balldetector.opencv;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -16,32 +20,42 @@ import org.opencv.imgproc.Imgproc;
  */
 
 public class OpenCVManager implements CameraBridgeViewBase.CvCameraViewListener2 {
-//    private static VideoCapture camera;
 
     private static OpenCVManager instance;
+    private CameraBridgeViewBase mCameraBridgeViewBase;
+    private ImageView mImageView;
 
-    private OpenCVManager(){
+    private OpenCVManager(Context context, int cameraId){
+        mCameraBridgeViewBase = new CameraBridgeViewBase(context, cameraId) {
+            @Override
+            protected boolean connectCamera(int width, int height) {
+                return true;
+            }
+
+            @Override
+            protected void disconnectCamera() {
+
+            }
+        };
     }
 
-    public static OpenCVManager get(){
-        if (instance == null){
-            instance = new OpenCVManager();
+    public static OpenCVManager get(Context context){
+        if (instance == null) {
+            instance = new OpenCVManager(context, 0);
         }
         return instance;
     }
 
 
     //methods
-    public void initOpenCV(final Context context, final CameraBridgeViewBase cameraBridgeViewBase){
-
-        cameraBridgeViewBase.setCameraIndex(0);
-        cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
-        cameraBridgeViewBase.setCvCameraViewListener(this);
+    public void initOpenCV(final Context context){
+        mCameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
+        mCameraBridgeViewBase.setCvCameraViewListener(this);
         OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_1_0, context, new BaseLoaderCallback(context) {
             @Override
             public void onManagerConnected(int status) {
                 if (status == LoaderCallbackInterface.SUCCESS) {
-                    start(cameraBridgeViewBase);
+                    start();
                 } else {
                     super.onManagerConnected(status);
                 }
@@ -49,27 +63,17 @@ public class OpenCVManager implements CameraBridgeViewBase.CvCameraViewListener2
         });
     }
 
-    private void start(CameraBridgeViewBase cameraBridgeViewBase) {
-        cameraBridgeViewBase.enableView();
+    private void start() {
+        mCameraBridgeViewBase.enableView();
     }
 
-    public void pause(CameraBridgeViewBase cameraBridgeViewBase) {
-        cameraBridgeViewBase.disableView();
+    public void pause() {
+        mCameraBridgeViewBase.disableView();
     }
 
-//    public Mat grabFrame() {
-//        if (camera.isOpened()) {
-//            try {
-//                Mat frame = new Mat();
-//                camera.read(frame);
-//                return frame;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
-//        }
-//        return null;
-//    }
+    public void setImageView(ImageView imageView) {
+        this.mImageView = imageView;
+    }
 
     @Override
     public void onCameraViewStarted(int width, int height) {
@@ -85,6 +89,17 @@ public class OpenCVManager implements CameraBridgeViewBase.CvCameraViewListener2
         Mat mRgbaT = mRgba.t();
         Core.flip(mRgba.t(), mRgbaT, 1);
         Imgproc.resize(mRgbaT, mRgbaT, mRgba.size());
-        return mRgbaT;
+        drawImage(mRgbaT);
+        return null;
+    }
+
+    private void drawImage(Mat frame) {
+        Mat frameRes = new Mat();
+        Imgproc.resize(frame, frameRes, new Size(700, 500));
+        Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(frameRes, bm);
+        if (mImageView != null) {
+            mImageView.setImageBitmap(bm);
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.server.ServerManager;
@@ -13,9 +14,6 @@ import com.anonymous.balldetector.server.ServerManager;
 import org.opencv.android.CameraBridgeViewBase;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-
-    private CameraBridgeViewBase mCameraBridgeViewBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        mCameraBridgeViewBase = findViewById(R.id.camera_preview);
+        OpenCVManager.get(this).setImageView((ImageView) findViewById(R.id.camera_preview));
     }
 
     @Override
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initOpenCV() {
         if (hasPermissions()) {
-            OpenCVManager.get().initOpenCV(this, mCameraBridgeViewBase);
+            OpenCVManager.get(this).initOpenCV(this);
         }
     }
 
@@ -63,16 +61,6 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         ServerManager.get().stopServer();
-        OpenCVManager.get().pause(mCameraBridgeViewBase);
-    }
-
-
-    private void drawImage() {
-//        Mat frame = OpenCVManager.get().grabFrame();
-//        Mat frameRes = new Mat();
-//        Imgproc.resize(frame, frameRes, new Size(700, 500));
-//        Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
-//        Utils.matToBitmap(frameRes, bm);
-//        imageView.setImageBitmap(bm);
+        OpenCVManager.get(this).pause();
     }
 }
