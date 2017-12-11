@@ -19,7 +19,7 @@ public class OpenCVManager {
     private VideoCapture mCamera;
 
     private OpenCVManager(int cameraId){
-        mCamera = new VideoCapture(cameraId);
+//        mCamera = new VideoCapture(cameraId);
     }
 
     public static OpenCVManager get(){

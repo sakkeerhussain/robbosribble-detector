@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.server.ServerManager;
+import com.anonymous.opencv.core.CvType;
+import com.anonymous.opencv.core.Mat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        System.loadLibrary("opencv_java3");
+        Mat mat = new Mat(3, 3, CvType.CV_8SC1);
+        System.out.print(mat);
+
 
         initViews();
 
