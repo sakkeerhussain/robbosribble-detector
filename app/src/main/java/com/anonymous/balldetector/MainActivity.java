@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.server.ServerManager;
 
-import org.opencv.android.CameraBridgeViewBase;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        OpenCVManager.get(this).setImageView((ImageView) findViewById(R.id.camera_preview));
+        OpenCVManager.get().setImageView((ImageView) findViewById(R.id.camera_preview));
     }
 
     @Override
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initOpenCV() {
         if (hasPermissions()) {
-            OpenCVManager.get(this).initOpenCV(this);
+            OpenCVManager.get().initOpenCV(this);
         }
     }
 
@@ -61,6 +59,6 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         ServerManager.get().stopServer();
-        OpenCVManager.get(this).pause();
+        OpenCVManager.get().pause();
     }
 }
