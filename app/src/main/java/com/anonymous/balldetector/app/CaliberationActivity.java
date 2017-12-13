@@ -41,7 +41,7 @@ public class CaliberationActivity extends AppCompatActivity {
 
     private void initOpenCV() {
         if (Utils.hasPermissions(this)) {
-            OpenCVManager.get().initOpenCV(this, mCameraBridgeViewBase);
+            OpenCVManager.get().initOpenCV(this);
         }
     }
 
@@ -54,6 +54,6 @@ public class CaliberationActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         ServerManager.get().stopServer();
-        OpenCVManager.get().pause(mCameraBridgeViewBase);
+        OpenCVManager.get().pause();
     }
 }
