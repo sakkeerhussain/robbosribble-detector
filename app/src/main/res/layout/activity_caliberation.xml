@@ -9,12 +9,11 @@
     <org.opencv.android.JavaCameraView
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:id="@+id/camera_preview"
-        android:background="@drawable/ic_launcher_foreground"/>
+        android:id="@+id/camera_preview" />
 
     <ImageView
-        android:id="@+id/iamge_view"
+        android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>
