@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.anonymous.balldetector.app.MainActivity">
 
-    <org.opencv.android.JavaCameraView
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        android:id="@+id/camera_preview" />
-
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"

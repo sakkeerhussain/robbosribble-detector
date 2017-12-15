@@ -15,13 +15,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".app.MainActivity"
             android:label="Detector">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
-        <activity android:name=".app.CaliberationActivity"
+        <activity android:name=".app.CalibrationActivity"
             android:label="Detector-Dev">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".app.CenterColorCalibrationActivity"
+            android:label="Detector-Dev" />
     </application>
 
 </manifest>

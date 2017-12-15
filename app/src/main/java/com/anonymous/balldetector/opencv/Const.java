@@ -8,8 +8,8 @@ import org.opencv.core.Scalar;
 
 public class Const {
 
-    public static final int BALL_RADIUS_MIN = 10;
-    public static final int BALL_RADIUS_MAX = 40;
+    public static final int BALL_RADIUS_MIN = 5;
+    public static final int BALL_RADIUS_MAX = 30;
     public static Scalar YELLOW_SCALAR_MIN = new Scalar(20,100,100);
     public static Scalar YELLOW_SCALAR_MAX = new Scalar(35,255,255);
 }

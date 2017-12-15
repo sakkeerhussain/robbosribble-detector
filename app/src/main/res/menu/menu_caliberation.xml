@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/display_normal"
+        android:title="Normal"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/display_in_range"
+        android:title="In-Range"
+        app:showAsAction="never" />
+    <group >
+        <item
+            android:id="@+id/open_center_color"
+            android:title="Center Color"
+            app:showAsAction="never" />
+    </group>
+</menu>
