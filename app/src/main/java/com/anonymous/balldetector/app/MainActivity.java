@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.anonymous.balldetector.R;
 import com.anonymous.balldetector.models.Ball;
+import com.anonymous.balldetector.opencv.Const;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.ServerManager;
@@ -15,7 +16,6 @@ import com.anonymous.balldetector.server.ServerManager;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
@@ -89,19 +89,19 @@ public class MainActivity extends AppCompatActivity {
         }
         List<Ball> balls = OpenCVUtils.getBalls(frame);
         for (Ball ball : balls) {
-            Imgproc.circle(frame, ball.getCenterPoint(), 4, new Scalar(0, 255, 0), -1, 8, 0);
+            Imgproc.circle(frame, ball.getCenterPoint(), 10, new Scalar(0, 255, 0), -1, 8, 0);
         }
-
         Mat frameRes = new Mat();
         Core.flip(frame.t(), frameRes, 1);
-//        Imgproc.resize(frameRes, frameRes, new Size(mImageView.getWidth(), mImageView.getHeight()));
-        final Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
-        org.opencv.android.Utils.matToBitmap(frameRes, bm);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mImageView.setImageBitmap(bm);
-            }
-        });
+        if (frameRes.cols() > 0 && frameRes.rows() > 0) {
+            final Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
+            org.opencv.android.Utils.matToBitmap(frameRes, bm);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mImageView.setImageBitmap(bm);
+                }
+            });
+        }
     }
 }

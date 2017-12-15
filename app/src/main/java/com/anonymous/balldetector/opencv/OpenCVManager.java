@@ -165,7 +165,7 @@ public class OpenCVManager implements Camera.PreviewCallback {
 
     @Override
     public void onPreviewFrame(byte[] frame, Camera camera) {
-        Log.d(TAG, "Raw frame updated");
+//        Log.d(TAG, "Raw frame updated");
         mYUVFrame.put(0, 0, frame);
 
         if (mCamera != null)
