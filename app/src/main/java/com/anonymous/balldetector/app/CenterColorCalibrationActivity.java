@@ -1,45 +1,37 @@
 package com.anonymous.balldetector.app;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.anonymous.balldetector.R;
-import com.anonymous.balldetector.models.Ball;
-import com.anonymous.balldetector.opencv.Const;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.ServerManager;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class CenterColorCalibrationActivity extends BaseActivity {
     private static final String TAG = "CenterColorActivity";
-    private static final int DISPLAY_NORMAL = 0;
-    private static final int DISPLAY_IN_RANGE = 1;
 
     private ImageView mImageView;
     private Timer mTimer;
-    private int mDisplayType = DISPLAY_NORMAL;
+    private int mDisplayType = OpenCVUtils.DISPLAY_NORMAL;
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_caliberation);
+        setContentView(R.layout.activity_center_color_caliberation);
 
         initViews();
 
@@ -48,6 +40,7 @@ public class CenterColorCalibrationActivity extends BaseActivity {
 
     private void initViews() {
         mImageView = findViewById(R.id.image_view);
+        mTextView = findViewById(R.id.text_view);
     }
 
     @Override
@@ -68,10 +61,10 @@ public class CenterColorCalibrationActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.display_normal:
-                mDisplayType = DISPLAY_NORMAL;
+                mDisplayType = OpenCVUtils.DISPLAY_NORMAL;
                 return true;
             case R.id.display_in_range:
-                mDisplayType = DISPLAY_IN_RANGE;
+                mDisplayType = OpenCVUtils.DISPLAY_IN_RANGE;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,44 +103,23 @@ public class CenterColorCalibrationActivity extends BaseActivity {
     }
 
     private void drawImage() {
-        Log.d(TAG, "drawImage() called");
         Mat frame = OpenCVManager.get().getRGBFrame();
-        if (frame == null) {
-            return;
-        }
-        List<Ball> balls = OpenCVUtils.getBalls(frame);
-        for (Ball ball : balls) {
-            Imgproc.circle(frame, ball.getCenterPoint(), 30, new Scalar(255, 0, 0), 3, 8, 0);
-        }
-
-        switch (mDisplayType){
-            case DISPLAY_IN_RANGE:
-                findInRangeFrame(frame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX);
-                break;
-        }
-
-        Mat frameRes = new Mat();
-        Core.flip(frame.t(), frameRes, 1);
-        if (frameRes.cols() > 0 && frameRes.rows() > 0) {
-            final Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
-            org.opencv.android.Utils.matToBitmap(frameRes, bm);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mImageView.setImageBitmap(bm);
-                }
-            });
-        }
+        final String hsv = findCenterHSV(frame);
+        OpenCVUtils.drawCurrentFrameToImageView(mImageView, this, false, mDisplayType);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextView.setText(hsv);
+            }
+        });
     }
 
-    private void findInRangeFrame(Mat frame, Scalar minRange, Scalar maxRange) {
-        Imgproc.medianBlur(frame, frame, 3);
-        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
-        Core.inRange(frame, minRange, maxRange, frame);
-        Imgproc.GaussianBlur(frame, frame, new Size(9, 9), 2, 2);
-        Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(24, 24));
-        Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(12, 12));
-        Imgproc.erode(frame, frame, erodeElement);
-        Imgproc.dilate(frame, frame, dilateElement);
+    private String findCenterHSV(Mat frame) {
+        Mat frameProc = new Mat();
+        Imgproc.cvtColor(frame, frameProc, Imgproc.COLOR_RGB2HSV);
+        Imgproc.circle(frame, new Point(frame.rows() / 2, frame.cols() / 2),
+                12, new Scalar(255, 0, 0), 10, 8, 0);
+        double[] point = frameProc.get(frame.rows() / 2, frame.cols() / 2);
+        return  "H: "+point[0]+"S: "+point[1]+"V: "+point[2];
     }
 }

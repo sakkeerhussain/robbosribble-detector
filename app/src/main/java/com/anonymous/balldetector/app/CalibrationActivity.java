@@ -28,12 +28,10 @@ import java.util.TimerTask;
 
 public class CalibrationActivity extends BaseActivity {
     private static final String TAG = "CalibrationActivity";
-    private static final int DISPLAY_NORMAL = 0;
-    private static final int DISPLAY_IN_RANGE = 1;
 
     private ImageView mImageView;
     private Timer mTimer;
-    private int mDisplayType = DISPLAY_NORMAL;
+    private int mDisplayType = OpenCVUtils.DISPLAY_NORMAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +65,10 @@ public class CalibrationActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.display_normal:
-                mDisplayType = DISPLAY_NORMAL;
+                mDisplayType = OpenCVUtils.DISPLAY_NORMAL;
                 return true;
             case R.id.display_in_range:
-                mDisplayType = DISPLAY_IN_RANGE;
+                mDisplayType = OpenCVUtils.DISPLAY_IN_RANGE;
                 return true;
             case R.id.open_center_color:
                 startActivity(new Intent(this, CenterColorCalibrationActivity.class));
@@ -112,44 +110,6 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     private void drawImage() {
-        Log.d(TAG, "drawImage() called");
-        Mat frame = OpenCVManager.get().getRGBFrame();
-        if (frame == null) {
-            return;
-        }
-        List<Ball> balls = OpenCVUtils.getBalls(frame);
-        for (Ball ball : balls) {
-            Imgproc.circle(frame, ball.getCenterPoint(), 30, new Scalar(255, 0, 0), 3, 8, 0);
-        }
-
-        switch (mDisplayType){
-            case DISPLAY_IN_RANGE:
-                findInRangeFrame(frame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX);
-                break;
-        }
-
-        Mat frameRes = new Mat();
-        Core.flip(frame.t(), frameRes, 1);
-        if (frameRes.cols() > 0 && frameRes.rows() > 0) {
-            final Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
-            org.opencv.android.Utils.matToBitmap(frameRes, bm);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mImageView.setImageBitmap(bm);
-                }
-            });
-        }
-    }
-
-    private void findInRangeFrame(Mat frame, Scalar minRange, Scalar maxRange) {
-        Imgproc.medianBlur(frame, frame, 3);
-        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
-        Core.inRange(frame, minRange, maxRange, frame);
-        Imgproc.GaussianBlur(frame, frame, new Size(9, 9), 2, 2);
-        Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(24, 24));
-        Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(12, 12));
-        Imgproc.erode(frame, frame, erodeElement);
-        Imgproc.dilate(frame, frame, dilateElement);
+        OpenCVUtils.drawCurrentFrameToImageView(mImageView, this, false, mDisplayType);
     }
 }
