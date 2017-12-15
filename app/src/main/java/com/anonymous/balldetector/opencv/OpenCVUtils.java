@@ -20,12 +20,36 @@ import java.util.List;
  */
 
 public class OpenCVUtils {
+    public static final String ERROR_INVALID_BALL_COUNT = "Invalid balls found. Only one ball should be in board to calibrate";
     public static final int DISPLAY_NORMAL = 0;
     public static final int DISPLAY_IN_RANGE = 1;
 
     public static List<Ball> getBalls(@NotNull Mat rgbaFrame) {
         return OpenCVManager.get().detectCircles(rgbaFrame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX,
                 Const.BALL_RADIUS_MIN, Const.BALL_RADIUS_MAX);
+    }
+
+    public static String updateRefPoints(int pointNo){
+        List<Ball> balls = getBalls(OpenCVManager.get().getRGBFrame());
+        if (balls.size() != 1){
+            return ERROR_INVALID_BALL_COUNT;
+        }
+        Ball ball = balls.get(0);
+        switch (pointNo){
+            case 1:
+                OpenCVManager.get().setRefPoint1(ball.getCenterPoint());
+                return "Success";
+            case 2:
+                OpenCVManager.get().setRefPoint2(ball.getCenterPoint());
+                return com.anonymous.balldetector.server.Const.SUCCESS;
+            case 3:
+                OpenCVManager.get().setRefPoint3(ball.getCenterPoint());
+                return com.anonymous.balldetector.server.Const.SUCCESS;
+            case 4:
+                OpenCVManager.get().setRefPoint4(ball.getCenterPoint());
+                return com.anonymous.balldetector.server.Const.SUCCESS;
+        }
+        return "Failed";
     }
 
     public static void drawCurrentFrameToImageView(final ImageView imageView, Activity activity, boolean withBall, int displayType) {

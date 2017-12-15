@@ -1,5 +1,6 @@
 package com.anonymous.balldetector.server;
 
+import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.response.RespBase;
 import com.anonymous.balldetector.server.response.RespError;
 import com.anonymous.balldetector.server.response.RespSuccess;
@@ -18,7 +19,7 @@ public class ServerManager {
 
     private static ServerManager instance;
 
-    private ServerManager(){
+    private ServerManager() {
         try {
             server = new MyServer();
         } catch (IOException e) {
@@ -26,8 +27,8 @@ public class ServerManager {
         }
     }
 
-    public static ServerManager get(){
-        if (instance == null){
+    public static ServerManager get() {
+        if (instance == null) {
             instance = new ServerManager();
         }
         return instance;
@@ -37,7 +38,7 @@ public class ServerManager {
     private MyServer server;
 
     //methods
-    public void startServer(){
+    public void startServer() {
         try {
             server.start();
         } catch (IOException e) {
@@ -46,8 +47,8 @@ public class ServerManager {
 
     }
 
-    public void stopServer(){
-        if(server != null) {
+    public void stopServer() {
+        if (server != null) {
             server.stop();
         }
     }
@@ -57,13 +58,33 @@ public class ServerManager {
         NanoHTTPD.Method method = session.getMethod();
         Map<String, List<String>> params = session.getParameters();
         String body = session.getQueryParameterString();
-        if (uri.startsWith(Const.Calibrate.URI)){
-            return processCalibrate(uri, method, params, body).toString();
+        if (uri.startsWith(Const.Calibrate.URI)) {
+            return processCalibrate(uri.substring(Const.Calibrate.URI.length()), method, params, body).toString();
         }
         return new RespError(Const.Error.INVALID_URI).toString();
     }
 
     private RespBase processCalibrate(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
-        return new RespSuccess("Success");
+        if (uri.startsWith(Const.Calibrate.URI_REF_POINT)) {
+            String response = null;
+            if (uri.startsWith(Const.Calibrate.URI_1)) {
+                response = OpenCVUtils.updateRefPoints(1);
+            } else if (uri.startsWith(Const.Calibrate.URI_2)) {
+                response = OpenCVUtils.updateRefPoints(2);
+            } else if (uri.startsWith(Const.Calibrate.URI_3)) {
+                response = OpenCVUtils.updateRefPoints(3);
+            } else if (uri.startsWith(Const.Calibrate.URI_4)) {
+                response = OpenCVUtils.updateRefPoints(4);
+            }
+
+            if (response != null) {
+                if (response.equals(Const.SUCCESS)) {
+                    return new RespSuccess("Configured reference pint.");
+                } else {
+                    return new RespError(response);
+                }
+            }
+        }
+        return new RespError(Const.Error.INVALID_URI);
     }
 }

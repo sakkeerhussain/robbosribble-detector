@@ -8,7 +8,12 @@ public class Const {
     public static final String SUCCESS = "ok";
 
     public class Calibrate {
-        public static final String URI = "calibrate";
+        public static final String URI = "/calibrate";
+        public static final String URI_REF_POINT = "/ref_point";
+        public static final String URI_1 = "/1";
+        public static final String URI_2 = "/2";
+        public static final String URI_3 = "/3";
+        public static final String URI_4 = "/4";
     }
 
     public class Error {

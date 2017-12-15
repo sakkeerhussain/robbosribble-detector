@@ -9,7 +9,6 @@ import android.util.Log;
 import com.anonymous.balldetector.models.Ball;
 
 import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -34,6 +33,11 @@ public class OpenCVManager implements Camera.PreviewCallback {
     private byte[] mBuffer;
     private Mat mYUVFrame;
     private SurfaceTexture mSurfaceTexture;
+
+    private Point refPoint1;
+    private Point refPoint2;
+    private Point refPoint3;
+    private Point refPoint4;
 
     private OpenCVManager() {
     }
@@ -108,9 +112,11 @@ public class OpenCVManager implements Camera.PreviewCallback {
     public void pause() {
         try {
             Log.d(TAG, "stopPreview");
-            mCamera.stopPreview();
-            mCamera.setPreviewCallback(null);
-            mCamera.release();
+            if (mCamera != null) {
+                mCamera.stopPreview();
+                mCamera.setPreviewCallback(null);
+                mCamera.release();
+            }
 
             mYUVFrame.release();
 
@@ -129,6 +135,21 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return rgbaFrame;
     }
 
+    public void setRefPoint1(Point point) {
+        this.refPoint1 = point;
+    }
+
+    public void setRefPoint2(Point point) {
+        this.refPoint2 = point;
+    }
+
+    public void setRefPoint3(Point point) {
+        this.refPoint3 = point;
+    }
+
+    public void setRefPoint4(Point point) {
+        this.refPoint4 = point;
+    }
 
     public List<Ball> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
         ArrayList<Ball> balls = new ArrayList<>();
