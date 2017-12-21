@@ -110,6 +110,6 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     private void drawImage() {
-        OpenCVUtils.drawCurrentFrameToImageView(mImageView, this, false, mDisplayType);
+        OpenCVUtils.drawFrameToImageView(mImageView, this, false, mDisplayType);
     }
 }

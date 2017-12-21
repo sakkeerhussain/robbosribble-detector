@@ -11,15 +11,13 @@ import fi.iki.elonen.NanoHTTPD;
 public class MyServer extends NanoHTTPD {
     private final static int PORT = 8080;
 
-    public MyServer() throws IOException {
+    MyServer() throws IOException {
         super(PORT);
         start();
-        System.out.println( "\nRunning! Point your browers to http://localhost:8080/ \n" );
     }
 
     @Override
     public Response serve(IHTTPSession session) {
-        String response = ServerManager.get().processExtRequest(session);
-        return newFixedLengthResponse( response );
+        return ServerManager.get().processExtRequest(session);
     }
 }

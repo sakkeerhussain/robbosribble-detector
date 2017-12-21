@@ -105,7 +105,7 @@ public class CenterColorCalibrationActivity extends BaseActivity {
     private void drawImage() {
         Mat frame = OpenCVManager.get().getRGBFrame();
         final String hsv = findCenterHSV(frame);
-        OpenCVUtils.drawCurrentFrameToImageView(mImageView, this, false, mDisplayType);
+        OpenCVUtils.drawFrameToImageView(frame, mImageView, this, false, mDisplayType);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -115,11 +115,14 @@ public class CenterColorCalibrationActivity extends BaseActivity {
     }
 
     private String findCenterHSV(Mat frame) {
+        if (frame.rows() <= 0 || frame.cols() <= 0){
+            return "Invalid image received";
+        }
         Mat frameProc = new Mat();
         Imgproc.cvtColor(frame, frameProc, Imgproc.COLOR_RGB2HSV);
         Imgproc.circle(frame, new Point(frame.rows() / 2, frame.cols() / 2),
-                12, new Scalar(255, 0, 0), 10, 8, 0);
+                12, new Scalar(0, 0, 255), 10, 8, 0);
         double[] point = frameProc.get(frame.rows() / 2, frame.cols() / 2);
-        return  "H: "+point[0]+"S: "+point[1]+"V: "+point[2];
+        return  "H: "+point[0]+", S: "+point[1]+", V: "+point[2];
     }
 }

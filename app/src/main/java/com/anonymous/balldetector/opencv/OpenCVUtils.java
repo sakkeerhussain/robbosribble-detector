@@ -52,8 +52,12 @@ public class OpenCVUtils {
         return "Failed";
     }
 
-    public static void drawCurrentFrameToImageView(final ImageView imageView, Activity activity, boolean withBall, int displayType) {
+    public static void drawFrameToImageView(final ImageView imageView, Activity activity, boolean withBall, int displayType) {
         Mat frame = OpenCVManager.get().getRGBFrame();
+        drawFrameToImageView(frame, imageView, activity, withBall, displayType);
+    }
+
+    public static void drawFrameToImageView(Mat frame, final ImageView imageView, Activity activity, boolean withBall, int displayType) {
         if (frame == null) {
             return;
         }
@@ -75,7 +79,7 @@ public class OpenCVUtils {
         if (frameRes.empty()) {
             return;
         }
-        Imgproc.resize(frameRes, frameRes, new Size(imageView.getWidth(), imageView.getHeight()));
+//        Imgproc.resize(frameRes, frameRes, new Size(imageView.getWidth(), imageView.getHeight()));
         if (frameRes.cols() > 0 && frameRes.rows() > 0) {
             final Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
             org.opencv.android.Utils.matToBitmap(frameRes, bm);
