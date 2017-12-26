@@ -64,7 +64,7 @@ public class CenterColorCalibrationActivity extends BaseActivity {
                 mDisplayType = OpenCVUtils.DISPLAY_NORMAL;
                 return true;
             case R.id.display_in_range:
-                mDisplayType = OpenCVUtils.DISPLAY_IN_RANGE;
+                mDisplayType = OpenCVUtils.DISPLAY_BALLS_IN_RANGE;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

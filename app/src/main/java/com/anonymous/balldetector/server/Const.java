@@ -19,18 +19,37 @@ public class Const {
     public class Stream {
         public static final String URI = "/stream";
         public static final String URI_RAW = "/raw";
+        public static final String URI_DETECTION = "/detection";
+        public static final String URI_BALL_COLOUR = "/ball-color";
+        public static final String URI_REF_COLOUR = "/ref-color";
+        public static final String URI_IMAGE = "/image";
 
         public static final String HTML = "<html>\n" +
                 "<head>\n" +
-                "<script>\n" +
-                "setInterval(function() {\n" +
-                "    var myImageElement = document.getElementById('image');\n" +
-                "    myImageElement.src = '{{type}}/?rand=' + Math.random();\n" +
-                "}, 1000);\n" +
-                "</script>\n" +
+                "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">\n" +
+                "\t<style type=\"text/css\">\n" +
+                "\t\t.control{\n" +
+                "\t\t\tfloat: right;\n" +
+                "\t\t}\n" +
+                "\t</style>\n" +
                 "</head>\n" +
-                "<body>\n" +
-                "<img id=\"image\">\n" +
+                "<body cz-shortcut-listen=\"true\">\n" +
+                "<img src=\"image/\" width=\"760\" height=\"570\" id=\"image\">\n" +
+                "<div class=\"control\">\n" +
+                "\t<ul>\n" +
+                "\t\t<li><a href=\"../raw/\">Raw</a></li>\n" +
+                "\t\t<li><a href=\"../detection/\">Detection</a></li>\n" +
+                "\t\t<li><a href=\"../ball-color/\">Ball color</a></li>\n" +
+                "\t\t<li><a href=\"../ref-color/\">Reference color</a></li>\n" +
+                "\t</ul>\n" +
+                "</div>\n" +
+                "<script>\n" +
+                "var myImageElement = document.getElementById('image');\n" +
+                "function imageLoaded() {\n" +
+                "    myImageElement.src = 'image/?rand=' + Math.random();\n" +
+                "} \n" +
+                "myImageElement.addEventListener('load', imageLoaded)\n" +
+                "</script>\n" +
                 "</body>\n" +
                 "</html>";
     }

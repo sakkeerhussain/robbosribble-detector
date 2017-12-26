@@ -69,7 +69,7 @@ public class ServerManager {
     NanoHTTPD.Response processExtRequest(NanoHTTPD.IHTTPSession session) {
         String uri = session.getUri();
         NanoHTTPD.Method method = session.getMethod();
-        Log.d(TAG, "HTTP "+method.name()+" "+uri);
+        Log.d(TAG, "HTTP "+method.name()+" ("+session.getRemoteIpAddress()+") "+uri);
         Map<String, List<String>> params = session.getParameters();
         String body = session.getQueryParameterString();
         String response;
@@ -83,15 +83,7 @@ public class ServerManager {
         return NanoHTTPD.newFixedLengthResponse( response );
     }
 
-    private NanoHTTPD.Response processStream(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
-        if (uri.length() <= 1) {
-            return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML.replace("{{type}}", "raw"));
-        }else if (uri.startsWith(Const.Stream.URI_RAW)) {
-            return getRawStream();
-        }
-        return NanoHTTPD.newFixedLengthResponse(new RespError(Const.Error.INVALID_URI).toString());
-    }
-
+    //Calibration methods
     private RespBase processCalibrate(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
         if (uri.startsWith(Const.Calibrate.URI_REF_POINT)) {
             String response = null;
@@ -116,11 +108,69 @@ public class ServerManager {
         return new RespError(Const.Error.INVALID_URI);
     }
 
+    //Stream methods
+    private NanoHTTPD.Response processStream(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
+        if (uri.startsWith(Const.Stream.URI_RAW)) {
+            uri = uri.substring(Const.Stream.URI_RAW.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getRawStream();
+            }
+        }else if (uri.startsWith(Const.Stream.URI_DETECTION)) {
+            uri = uri.substring(Const.Stream.URI_DETECTION.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getDetectionStream();
+            }
+        }else if (uri.startsWith(Const.Stream.URI_BALL_COLOUR)) {
+            uri = uri.substring(Const.Stream.URI_BALL_COLOUR.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getBallColourStream();
+            }
+        }else if (uri.startsWith(Const.Stream.URI_REF_COLOUR)) {
+            uri = uri.substring(Const.Stream.URI_REF_COLOUR.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getReferenceColourStream();
+            }
+        }
+        return NanoHTTPD.newFixedLengthResponse(new RespError(Const.Error.INVALID_URI).toString());
+    }
+
     private NanoHTTPD.Response getRawStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
+//        OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_BALLS_IN_RANGE, frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getDetectionStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        // TODO: 22/12/17 draw board
+        OpenCVUtils.drawBallsToFrame(frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getFrameAsStream(Mat frame) {
         final Bitmap bm = Bitmap.createBitmap(frame.cols(), frame.rows(), Bitmap.Config.ARGB_8888);
         org.opencv.android.Utils.matToBitmap(frame, bm);
         return getImageResponse(bm);
+    }
+
+    private NanoHTTPD.Response getBallColourStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_BALLS_IN_RANGE, frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getReferenceColourStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_REFERENCE_IN_RANGE, frame);
+        return getFrameAsStream(frame);
     }
 
     private NanoHTTPD.Response getImageResponse(Bitmap bitmap) {

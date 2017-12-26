@@ -1,28 +1,17 @@
 package com.anonymous.balldetector.app;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.anonymous.balldetector.R;
-import com.anonymous.balldetector.models.Ball;
-import com.anonymous.balldetector.opencv.Const;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.ServerManager;
 
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -68,7 +57,7 @@ public class CalibrationActivity extends BaseActivity {
                 mDisplayType = OpenCVUtils.DISPLAY_NORMAL;
                 return true;
             case R.id.display_in_range:
-                mDisplayType = OpenCVUtils.DISPLAY_IN_RANGE;
+                mDisplayType = OpenCVUtils.DISPLAY_BALLS_IN_RANGE;
                 return true;
             case R.id.open_center_color:
                 startActivity(new Intent(this, CenterColorCalibrationActivity.class));

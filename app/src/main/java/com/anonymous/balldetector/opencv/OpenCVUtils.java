@@ -22,7 +22,8 @@ import java.util.List;
 public class OpenCVUtils {
     public static final String ERROR_INVALID_BALL_COUNT = "Invalid balls found. Only one ball should be in board to calibrate";
     public static final int DISPLAY_NORMAL = 0;
-    public static final int DISPLAY_IN_RANGE = 1;
+    public static final int DISPLAY_BALLS_IN_RANGE = 1;
+    public static final int DISPLAY_REFERENCE_IN_RANGE = 2;
 
     public static List<Ball> getBalls(@NotNull Mat rgbaFrame) {
         return OpenCVManager.get().detectCircles(rgbaFrame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX,
@@ -62,17 +63,10 @@ public class OpenCVUtils {
             return;
         }
         if (withBall) {
-            List<Ball> balls = OpenCVUtils.getBalls(frame);
-            for (Ball ball : balls) {
-                Imgproc.circle(frame, ball.getCenterPoint(), 10, new Scalar(0, 255, 0), -1, 8, 0);
-            }
+            drawBallsToFrame(frame);
         }
 
-        switch (displayType){
-            case DISPLAY_IN_RANGE:
-                findInRangeFrame(frame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX);
-                break;
-        }
+        updateDisplayType(displayType, frame);
 
         Mat frameRes = new Mat();
         Core.flip(frame.t(), frameRes, 1);
@@ -89,6 +83,24 @@ public class OpenCVUtils {
                     imageView.setImageBitmap(bm);
                 }
             });
+        }
+    }
+
+    public static void drawBallsToFrame(Mat frame) {
+        List<Ball> balls = OpenCVUtils.getBalls(frame);
+        for (Ball ball : balls) {
+            Imgproc.circle(frame, ball.getCenterPoint(), 15, new Scalar(0, 255, 0), 3, 8, 0);
+        }
+    }
+
+    public static void updateDisplayType(int displayType, Mat frame) {
+        switch (displayType){
+            case DISPLAY_BALLS_IN_RANGE:
+                findInRangeFrame(frame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX);
+                break;
+            case DISPLAY_REFERENCE_IN_RANGE:
+                findInRangeFrame(frame, Const.REFERENCE_SCALAR_MIN, Const.REFERENCE_SCALAR_MAX);
+                break;
         }
     }
 
