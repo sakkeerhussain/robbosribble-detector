@@ -6,11 +6,11 @@ import org.opencv.core.Point;
  * Created by sakkeer on 13/12/17.
  */
 
-public class Ball {
+public class Circle {
     private double x;
     private double y;
 
-    public Ball(double x, double y) {
+    public Circle(double x, double y) {
         this.x = x;
         this.y = y;
     }

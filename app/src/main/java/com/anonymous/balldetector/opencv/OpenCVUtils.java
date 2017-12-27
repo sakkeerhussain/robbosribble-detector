@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import com.anonymous.balldetector.models.Ball;
+import com.anonymous.balldetector.models.Circle;
 
 import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
@@ -20,34 +20,39 @@ import java.util.List;
  */
 
 public class OpenCVUtils {
-    public static final String ERROR_INVALID_BALL_COUNT = "Invalid balls found. Only one ball should be in board to calibrate";
+    private static final String ERROR_INVALID_REF_POINT_COUNT = "Invalid reference points found. Only one reference point should be in board to calibrate";
     public static final int DISPLAY_NORMAL = 0;
     public static final int DISPLAY_BALLS_IN_RANGE = 1;
     public static final int DISPLAY_REFERENCE_IN_RANGE = 2;
 
-    public static List<Ball> getBalls(@NotNull Mat rgbaFrame) {
-        return OpenCVManager.get().detectCircles(rgbaFrame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX,
+    public static List<Circle> getBalls(@NotNull Mat rgbaFrame) {
+        return OpenCVManager.get().detectCircles(rgbaFrame, Const.BALL_SCALAR_MIN, Const.BALL_SCALAR_MAX,
                 Const.BALL_RADIUS_MIN, Const.BALL_RADIUS_MAX);
     }
 
+    public static List<Circle> getRefPoint(@NotNull Mat rgbaFrame) {
+        return OpenCVManager.get().detectCircles(rgbaFrame, Const.REFERENCE_SCALAR_MIN, Const.REFERENCE_SCALAR_MAX,
+                Const.REFERENCE_RADIUS_MIN, Const.REFERENCE_RADIUS_MAX);
+    }
+
     public static String updateRefPoints(int pointNo){
-        List<Ball> balls = getBalls(OpenCVManager.get().getRGBFrame());
-        if (balls.size() != 1){
-            return ERROR_INVALID_BALL_COUNT;
+        List<Circle> referencePoints = getRefPoint(OpenCVManager.get().getRGBFrame());
+        if (referencePoints.size() != 1){
+            return ERROR_INVALID_REF_POINT_COUNT;
         }
-        Ball ball = balls.get(0);
+        Circle referencePoint = referencePoints.get(0);
         switch (pointNo){
             case 1:
-                OpenCVManager.get().setRefPoint1(ball.getCenterPoint());
+                OpenCVManager.get().setRefPoint1(referencePoint.getCenterPoint());
                 return "Success";
             case 2:
-                OpenCVManager.get().setRefPoint2(ball.getCenterPoint());
+                OpenCVManager.get().setRefPoint2(referencePoint.getCenterPoint());
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 3:
-                OpenCVManager.get().setRefPoint3(ball.getCenterPoint());
+                OpenCVManager.get().setRefPoint3(referencePoint.getCenterPoint());
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 4:
-                OpenCVManager.get().setRefPoint4(ball.getCenterPoint());
+                OpenCVManager.get().setRefPoint4(referencePoint.getCenterPoint());
                 return com.anonymous.balldetector.server.Const.SUCCESS;
         }
         return "Failed";
@@ -87,16 +92,23 @@ public class OpenCVUtils {
     }
 
     public static void drawBallsToFrame(Mat frame) {
-        List<Ball> balls = OpenCVUtils.getBalls(frame);
-        for (Ball ball : balls) {
+        List<Circle> balls = OpenCVUtils.getBalls(frame);
+        for (Circle ball : balls) {
             Imgproc.circle(frame, ball.getCenterPoint(), 15, new Scalar(0, 255, 0), 3, 8, 0);
+        }
+    }
+
+    public static void drawRefPointsToFrame(Mat frame) {
+        List<Circle> refPoints = OpenCVUtils.getRefPoint(frame);
+        for (Circle refPoint : refPoints) {
+            Imgproc.circle(frame, refPoint.getCenterPoint(), 15, new Scalar(0, 255, 0), 3, 8, 0);
         }
     }
 
     public static void updateDisplayType(int displayType, Mat frame) {
         switch (displayType){
             case DISPLAY_BALLS_IN_RANGE:
-                findInRangeFrame(frame, Const.YELLOW_SCALAR_MIN, Const.YELLOW_SCALAR_MAX);
+                findInRangeFrame(frame, Const.BALL_SCALAR_MIN, Const.BALL_SCALAR_MAX);
                 break;
             case DISPLAY_REFERENCE_IN_RANGE:
                 findInRangeFrame(frame, Const.REFERENCE_SCALAR_MIN, Const.REFERENCE_SCALAR_MAX);

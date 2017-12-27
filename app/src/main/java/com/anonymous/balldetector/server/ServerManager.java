@@ -86,6 +86,7 @@ public class ServerManager {
     //Calibration methods
     private RespBase processCalibrate(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
         if (uri.startsWith(Const.Calibrate.URI_REF_POINT)) {
+            uri = uri.substring(Const.Calibrate.URI_REF_POINT.length());
             String response = null;
             if (uri.startsWith(Const.Calibrate.URI_1)) {
                 response = OpenCVUtils.updateRefPoints(1);
@@ -170,6 +171,7 @@ public class ServerManager {
     private NanoHTTPD.Response getReferenceColourStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
         OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_REFERENCE_IN_RANGE, frame);
+        OpenCVUtils.drawRefPointsToFrame(frame);
         return getFrameAsStream(frame);
     }
 

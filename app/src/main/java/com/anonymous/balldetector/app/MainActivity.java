@@ -12,20 +12,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        initViews();
-
         Utils.requestPermissions(this);
-    }
 
-    private void initViews() {
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ServerManager.get().startServer();
         initOpenCV();
+        ServerManager.get().startServer();
     }
 
     private void initOpenCV() {
@@ -40,8 +30,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         ServerManager.get().stopServer();
         OpenCVManager.get().pause();
     }

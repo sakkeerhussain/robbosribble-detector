@@ -6,7 +6,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.util.Log;
 
-import com.anonymous.balldetector.models.Ball;
+import com.anonymous.balldetector.models.Circle;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.OpenCVLoader;
@@ -151,8 +151,8 @@ public class OpenCVManager implements Camera.PreviewCallback {
         this.refPoint4 = point;
     }
 
-    public List<Ball> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
-        ArrayList<Ball> balls = new ArrayList<>();
+    public List<Circle> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
+        ArrayList<Circle> circles = new ArrayList<>();
         try {
             Mat frameProc = new Mat();
             Imgproc.medianBlur(frame, frameProc, 3);
@@ -164,24 +164,24 @@ public class OpenCVManager implements Camera.PreviewCallback {
             Imgproc.erode(frameProc, frameProc, erodeElement);
             Imgproc.dilate(frameProc, frameProc, dilateElement);
 
-            Mat circles = new Mat();
-            Imgproc.HoughCircles(frameProc, circles, Imgproc.CV_HOUGH_GRADIENT,
+            Mat circlesMat = new Mat();
+            Imgproc.HoughCircles(frameProc, circlesMat, Imgproc.CV_HOUGH_GRADIENT,
                     1, 30, 20, 20, minRadius, maxRadius);
 
-            for (int i = 0; i < circles.cols(); i++) {
-                double[] circle = circles.get(0, i);
+            for (int i = 0; i < circlesMat.cols(); i++) {
+                double[] circle = circlesMat.get(0, i);
                 if (frame.get((int) circle[1], (int) circle[0])[0] > 140) {
                     Point center = new Point((int) circle[0], (int) circle[1]);
                     int radius = (int) circle[2];
                     Log.d(TAG, "Ball detected with radius: " + radius + ", and center at " + center);
                     // TODO: 13/12/17 Calculate circle point according to calib points
-                    balls.add(new Ball(circle[0], circle[1]));
+                    circles.add(new Circle(circle[0], circle[1]));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return balls;
+        return circles;
     }
 
     @Override
