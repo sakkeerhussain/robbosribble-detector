@@ -9,6 +9,7 @@ import com.anonymous.balldetector.models.Circle;
 import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -44,7 +45,7 @@ public class OpenCVUtils {
         switch (pointNo){
             case 1:
                 OpenCVManager.get().setRefPoint1(referencePoint.getCenterPoint());
-                return "Success";
+                return com.anonymous.balldetector.server.Const.SUCCESS;
             case 2:
                 OpenCVManager.get().setRefPoint2(referencePoint.getCenterPoint());
                 return com.anonymous.balldetector.server.Const.SUCCESS;
@@ -102,6 +103,39 @@ public class OpenCVUtils {
         List<Circle> refPoints = OpenCVUtils.getRefPoint(frame);
         for (Circle refPoint : refPoints) {
             Imgproc.circle(frame, refPoint.getCenterPoint(), 15, new Scalar(0, 0, 255), 3, 8, 0);
+        }
+    }
+
+    public static void drawBordToFrame(Mat frame) {
+        Point refPoint1 = OpenCVManager.get().getRefPoint1();
+        Point refPoint2 = OpenCVManager.get().getRefPoint2();
+        Point refPoint3 = OpenCVManager.get().getRefPoint3();
+        Point refPoint4 = OpenCVManager.get().getRefPoint4();
+
+        if (refPoint1 != null && refPoint2 != null){
+            Imgproc.line(frame, refPoint1, refPoint2, new Scalar(225, 0, 0), 3);
+        }
+        if (refPoint1 != null && refPoint3 != null){
+            Imgproc.line(frame, refPoint1, refPoint3, new Scalar(225, 0, 0), 3);
+        }
+        if (refPoint4 != null && refPoint2 != null){
+            Imgproc.line(frame, refPoint4, refPoint2, new Scalar(225, 0, 0), 3);
+        }
+        if (refPoint3 != null && refPoint4 != null){
+            Imgproc.line(frame, refPoint3, refPoint4, new Scalar(225, 0, 0), 3);
+        }
+
+        if (refPoint1 != null){
+            Imgproc.putText(frame, "1", refPoint1, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
+        }
+        if (refPoint2 != null){
+            Imgproc.putText(frame, "2", refPoint2, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
+        }
+        if (refPoint3 != null){
+            Imgproc.putText(frame, "3", refPoint3, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
+        }
+        if (refPoint4 != null){
+            Imgproc.putText(frame, "4", refPoint4, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
         }
     }
 

@@ -6,6 +6,9 @@ import com.anonymous.balldetector.R;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.server.ServerManager;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends BaseActivity {
 
     @Override
@@ -15,7 +18,13 @@ public class MainActivity extends BaseActivity {
         Utils.requestPermissions(this);
 
         initOpenCV();
-        ServerManager.get().startServer();
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                ServerManager.get().startServer();
+            }
+        }, 0, 10000);
     }
 
     private void initOpenCV() {

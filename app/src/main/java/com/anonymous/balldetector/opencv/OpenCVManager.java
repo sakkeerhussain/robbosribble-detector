@@ -151,6 +151,22 @@ public class OpenCVManager implements Camera.PreviewCallback {
         this.refPoint4 = point;
     }
 
+    public Point getRefPoint1() {
+        return this.refPoint1;
+    }
+
+    public Point getRefPoint2() {
+        return this.refPoint2;
+    }
+
+    public Point getRefPoint3() {
+        return this.refPoint3;
+    }
+
+    public Point getRefPoint4() {
+        return this.refPoint4;
+    }
+
     public List<Circle> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
         ArrayList<Circle> circles = new ArrayList<>();
         try {

@@ -53,8 +53,7 @@ public class ServerManager {
         Log.d(TAG, "Starting server");
         try {
             server.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
 
     }
@@ -145,15 +144,14 @@ public class ServerManager {
 
     private NanoHTTPD.Response getRawStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
-//        OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_BALLS_IN_RANGE, frame);
         return getFrameAsStream(frame);
     }
 
     private NanoHTTPD.Response getDetectionStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
-        // TODO: 22/12/17 draw board
         OpenCVUtils.drawBallsToFrame(frame);
         OpenCVUtils.drawRefPointsToFrame(frame);
+        OpenCVUtils.drawBordToFrame(frame);
         return getFrameAsStream(frame);
     }
 
