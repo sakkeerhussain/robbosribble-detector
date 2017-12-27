@@ -153,6 +153,7 @@ public class ServerManager {
         Mat frame = OpenCVManager.get().getRGBFrame();
         // TODO: 22/12/17 draw board
         OpenCVUtils.drawBallsToFrame(frame);
+        OpenCVUtils.drawRefPointsToFrame(frame);
         return getFrameAsStream(frame);
     }
 
@@ -171,7 +172,6 @@ public class ServerManager {
     private NanoHTTPD.Response getReferenceColourStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
         OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_REFERENCE_IN_RANGE, frame);
-        OpenCVUtils.drawRefPointsToFrame(frame);
         return getFrameAsStream(frame);
     }
 

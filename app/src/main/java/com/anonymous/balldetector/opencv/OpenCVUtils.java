@@ -101,7 +101,7 @@ public class OpenCVUtils {
     public static void drawRefPointsToFrame(Mat frame) {
         List<Circle> refPoints = OpenCVUtils.getRefPoint(frame);
         for (Circle refPoint : refPoints) {
-            Imgproc.circle(frame, refPoint.getCenterPoint(), 15, new Scalar(0, 255, 0), 3, 8, 0);
+            Imgproc.circle(frame, refPoint.getCenterPoint(), 15, new Scalar(0, 0, 255), 3, 8, 0);
         }
     }
 
