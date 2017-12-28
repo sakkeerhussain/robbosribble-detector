@@ -11,6 +11,7 @@ import com.anonymous.balldetector.server.response.RespError;
 import com.anonymous.balldetector.server.response.RespSuccess;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -89,24 +90,34 @@ public class ServerManager {
             uri = uri.substring(Const.Calibrate.URI_REF_POINT.length());
             if (uri.startsWith(Const.Calibrate.URI_1)) {
                 uri = uri.substring(Const.Calibrate.URI_1.length());
-                return processCalibration(1, uri);
+                return processCalibration(1, uri, method, params);
             } else if (uri.startsWith(Const.Calibrate.URI_2)) {
                 uri = uri.substring(Const.Calibrate.URI_2.length());
-                return processCalibration(2, uri);
+                return processCalibration(2, uri, method, params);
             } else if (uri.startsWith(Const.Calibrate.URI_3)) {
                 uri = uri.substring(Const.Calibrate.URI_3.length());
-                return processCalibration(3, uri);
+                return processCalibration(3, uri, method, params);
             } else if (uri.startsWith(Const.Calibrate.URI_4)) {
                 uri = uri.substring(Const.Calibrate.URI_4.length());
-                return processCalibration(4, uri);
+                return processCalibration(4, uri, method, params);
             }
         }
         return new RespError(Const.Error.INVALID_URI);
     }
 
-    private RespBase processCalibration(int point, String uri) {
+    private RespBase processCalibration(int point, String uri, NanoHTTPD.Method method, Map<String, List<String>> params) {
         if (uri.startsWith(Const.Calibrate.URI_VALUE)){
-            return new CalibrationValue(point);
+            if (method == NanoHTTPD.Method.POST) {
+                try {
+                    float x = Float.valueOf(params.get("x").get(0));
+                    float y = Float.valueOf(params.get("y").get(0));
+                    OpenCVManager.get().setRefPoint(x, y, point);
+                    return new RespSuccess("Updated");
+                }catch (Exception e){
+                    return new RespError(e.getMessage());
+                }
+            }else
+                return new CalibrationValue(point);
         }else {
             String response = OpenCVUtils.updateRefPoints(point);
             if (response.equals(Const.SUCCESS)){
