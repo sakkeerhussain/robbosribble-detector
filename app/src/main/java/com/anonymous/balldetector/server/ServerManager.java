@@ -159,15 +159,8 @@ public class ServerManager {
     private NanoHTTPD.Response getDetectionStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
         OpenCVUtils.drawBallsToFrame(frame);
-        OpenCVUtils.drawRefPointsToFrame(frame);
         OpenCVUtils.drawBordToFrame(frame);
         return getFrameAsStream(frame);
-    }
-
-    private NanoHTTPD.Response getFrameAsStream(Mat frame) {
-        final Bitmap bm = Bitmap.createBitmap(frame.cols(), frame.rows(), Bitmap.Config.ARGB_8888);
-        org.opencv.android.Utils.matToBitmap(frame, bm);
-        return getImageResponse(bm);
     }
 
     private NanoHTTPD.Response getBallColourStream() {
@@ -178,8 +171,15 @@ public class ServerManager {
 
     private NanoHTTPD.Response getReferenceColourStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.drawRefPointsToFrame(frame);
         OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_REFERENCE_IN_RANGE, frame);
         return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getFrameAsStream(Mat frame) {
+        final Bitmap bm = Bitmap.createBitmap(frame.cols(), frame.rows(), Bitmap.Config.ARGB_8888);
+        org.opencv.android.Utils.matToBitmap(frame, bm);
+        return getImageResponse(bm);
     }
 
     private NanoHTTPD.Response getImageResponse(Bitmap bitmap) {

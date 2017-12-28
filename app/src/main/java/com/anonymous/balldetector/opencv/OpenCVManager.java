@@ -209,15 +209,15 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return circles;
     }
 
-    private Mat clipFrame(Mat frame) {
-        Mat frameProc = frame.clone();
+    public Mat clipFrame(Mat frame) {
+        Mat frameRes = new Mat();
         MatOfPoint refPoints = OpenCVManager.get().getRefPoints();
         if (refPoints != null) {
-            Mat mask = Mat.zeros(frame.rows(), frame.cols(), CvType.CV_8UC3);
-            Imgproc.fillConvexPoly(mask, refPoints, new Scalar(0, 255, 0));
-            frameProc.copyTo(frameProc, mask);
+            Mat mask = Mat.zeros(frame.rows(), frame.cols(), CvType.CV_8UC4);
+            Imgproc.fillConvexPoly(mask, refPoints, new Scalar(255, 255, 255));
+            frame.copyTo(frameRes, mask);
         }
-        return frameProc;
+        return frameRes;
     }
 
     @Override
@@ -230,10 +230,10 @@ public class OpenCVManager implements Camera.PreviewCallback {
     }
 
     private MatOfPoint getRefPoints() {
-        if (refPoint1 == null || refPoint2 == null || refPoint3 == null || refPoint4 != null) {
+        if (refPoint1 == null || refPoint2 == null || refPoint3 == null || refPoint4 == null) {
             return null;
         }
-        Point[] points = new Point[]{refPoint1, refPoint2, refPoint3, refPoint4};
+        Point[] points = new Point[]{refPoint1, refPoint2, refPoint4, refPoint3};
         MatOfPoint matOfPoint = new MatOfPoint();
         matOfPoint.fromArray(points);
         return matOfPoint;
