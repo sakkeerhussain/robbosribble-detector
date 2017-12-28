@@ -144,19 +144,19 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return rgbaFrame;
     }
 
-    public void setRefPoint1(Point point) {
+    void setRefPoint1(Point point) {
         this.refPoint1 = point;
     }
 
-    public void setRefPoint2(Point point) {
+    void setRefPoint2(Point point) {
         this.refPoint2 = point;
     }
 
-    public void setRefPoint3(Point point) {
+    void setRefPoint3(Point point) {
         this.refPoint3 = point;
     }
 
-    public void setRefPoint4(Point point) {
+    void setRefPoint4(Point point) {
         this.refPoint4 = point;
     }
 
