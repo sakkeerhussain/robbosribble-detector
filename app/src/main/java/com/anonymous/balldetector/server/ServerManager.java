@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
+import com.anonymous.balldetector.server.response.CalibrationValue;
 import com.anonymous.balldetector.server.response.RespBase;
 import com.anonymous.balldetector.server.response.RespError;
 import com.anonymous.balldetector.server.response.RespSuccess;
@@ -86,26 +87,34 @@ public class ServerManager {
     private RespBase processCalibrate(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
         if (uri.startsWith(Const.Calibrate.URI_REF_POINT)) {
             uri = uri.substring(Const.Calibrate.URI_REF_POINT.length());
-            String response = null;
             if (uri.startsWith(Const.Calibrate.URI_1)) {
-                response = OpenCVUtils.updateRefPoints(1);
+                uri = uri.substring(Const.Calibrate.URI_1.length());
+                return processCalibration(1, uri);
             } else if (uri.startsWith(Const.Calibrate.URI_2)) {
-                response = OpenCVUtils.updateRefPoints(2);
+                uri = uri.substring(Const.Calibrate.URI_2.length());
+                return processCalibration(2, uri);
             } else if (uri.startsWith(Const.Calibrate.URI_3)) {
-                response = OpenCVUtils.updateRefPoints(3);
+                uri = uri.substring(Const.Calibrate.URI_3.length());
+                return processCalibration(3, uri);
             } else if (uri.startsWith(Const.Calibrate.URI_4)) {
-                response = OpenCVUtils.updateRefPoints(4);
-            }
-
-            if (response != null) {
-                if (response.equals(Const.SUCCESS)) {
-                    return new RespSuccess("Configured reference pint.");
-                } else {
-                    return new RespError(response);
-                }
+                uri = uri.substring(Const.Calibrate.URI_4.length());
+                return processCalibration(4, uri);
             }
         }
         return new RespError(Const.Error.INVALID_URI);
+    }
+
+    private RespBase processCalibration(int point, String uri) {
+        if (uri.startsWith(Const.Calibrate.URI_VALUE)){
+            return new CalibrationValue(point);
+        }else {
+            String response = OpenCVUtils.updateRefPoints(point);
+            if (response.equals(Const.SUCCESS)){
+                return new RespSuccess("Configured reference pint.");
+            }else{
+                return new RespError(response);
+            }
+        }
     }
 
     //Stream methods

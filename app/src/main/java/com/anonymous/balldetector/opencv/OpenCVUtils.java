@@ -79,7 +79,6 @@ public class OpenCVUtils {
         if (frameRes.empty()) {
             return;
         }
-//        Imgproc.resize(frameRes, frameRes, new Size(imageView.getWidth(), imageView.getHeight()));
         if (frameRes.cols() > 0 && frameRes.rows() > 0) {
             final Bitmap bm = Bitmap.createBitmap(frameRes.cols(), frameRes.rows(), Bitmap.Config.ARGB_8888);
             org.opencv.android.Utils.matToBitmap(frameRes, bm);

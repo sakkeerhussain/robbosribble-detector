@@ -14,6 +14,7 @@ public class Const {
         public static final String URI_2 = "/2";
         public static final String URI_3 = "/3";
         public static final String URI_4 = "/4";
+        public static final String URI_VALUE = "/value";
     }
 
     public class Stream {

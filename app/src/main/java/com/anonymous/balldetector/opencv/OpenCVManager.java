@@ -13,6 +13,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -40,6 +41,14 @@ public class OpenCVManager implements Camera.PreviewCallback {
     private Point refPoint4;
 
     private OpenCVManager() {
+
+        //for testing only
+        refPoint1 = new Point(189.5, 162.5);
+        refPoint2 = new Point(1089.5, 255.5);
+        refPoint3 = new Point(238.5, 753.5);
+        refPoint4 = new Point(1039.5, 788.5);
+        //for testing only
+
     }
 
     public static OpenCVManager get() {
@@ -167,11 +176,11 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return this.refPoint4;
     }
 
-    public List<Circle> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
+    List<Circle> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
         ArrayList<Circle> circles = new ArrayList<>();
         try {
-            Mat frameProc = new Mat();
-            Imgproc.medianBlur(frame, frameProc, 3);
+            Mat frameProc = clipFrame(frame);
+            Imgproc.medianBlur(frameProc, frameProc, 3);
             Imgproc.cvtColor(frameProc, frameProc, Imgproc.COLOR_RGB2HSV);
             Core.inRange(frameProc, minRange, maxRange, frameProc);
             Imgproc.GaussianBlur(frameProc, frameProc, new Size(9, 9), 2, 2);
@@ -200,6 +209,17 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return circles;
     }
 
+    private Mat clipFrame(Mat frame) {
+        Mat frameProc = frame.clone();
+        MatOfPoint refPoints = OpenCVManager.get().getRefPoints();
+        if (refPoints != null) {
+            Mat mask = Mat.zeros(frame.rows(), frame.cols(), CvType.CV_8UC3);
+            Imgproc.fillConvexPoly(mask, refPoints, new Scalar(0, 255, 0));
+            frameProc.copyTo(frameProc, mask);
+        }
+        return frameProc;
+    }
+
     @Override
     public void onPreviewFrame(byte[] frame, Camera camera) {
 //        Log.d(TAG, "Raw frame updated");
@@ -207,5 +227,15 @@ public class OpenCVManager implements Camera.PreviewCallback {
 
         if (mCamera != null)
             mCamera.addCallbackBuffer(mBuffer);
+    }
+
+    private MatOfPoint getRefPoints() {
+        if (refPoint1 == null || refPoint2 == null || refPoint3 == null || refPoint4 != null) {
+            return null;
+        }
+        Point[] points = new Point[]{refPoint1, refPoint2, refPoint3, refPoint4};
+        MatOfPoint matOfPoint = new MatOfPoint();
+        matOfPoint.fromArray(points);
+        return matOfPoint;
     }
 }
