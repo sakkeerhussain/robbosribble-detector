@@ -11,33 +11,23 @@ import org.opencv.core.Point;
 
 public class CalibrationValue extends RespSuccess {
 
-    public CalibrationValueData data;
+    public ReferencePoint data;
 
     public CalibrationValue(int point){
         super("Calibration value");
-        ReferencePoint value = null;
         switch (point){
             case 1:
-                value = OpenCVManager.get().getRefPoint1();
+                data = OpenCVManager.get().getRefPoint1();
                 break;
             case 2:
-                value = OpenCVManager.get().getRefPoint2();
+                data = OpenCVManager.get().getRefPoint2();
                 break;
             case 3:
-                value = OpenCVManager.get().getRefPoint3();
+                data = OpenCVManager.get().getRefPoint3();
                 break;
             case 4:
-                value = OpenCVManager.get().getRefPoint4();
+                data = OpenCVManager.get().getRefPoint4();
                 break;
-        }
-        data = new CalibrationValueData(value);
-    }
-
-    private class CalibrationValueData {
-        ReferencePoint value;
-
-        CalibrationValueData(ReferencePoint value){
-            this.value = value;
         }
     }
 }
