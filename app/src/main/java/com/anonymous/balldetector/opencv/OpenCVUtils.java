@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.anonymous.balldetector.models.Circle;
+import com.anonymous.balldetector.models.ReferencePoint;
 
 import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
@@ -36,24 +37,24 @@ public class OpenCVUtils {
                 Const.REFERENCE_RADIUS_MIN, Const.REFERENCE_RADIUS_MAX);
     }
 
-    public static String updateRefPoints(int pointNo){
+    public static String updateRefPoints(int pointNo) {
         List<Circle> referencePoints = getRefPoint(OpenCVManager.get().getRGBFrame());
-        if (referencePoints.size() != 1){
+        if (referencePoints.size() != 1) {
             return ERROR_INVALID_REF_POINT_COUNT;
         }
         Circle referencePoint = referencePoints.get(0);
-        switch (pointNo){
+        switch (pointNo) {
             case 1:
-                OpenCVManager.get().setRefPoint1(referencePoint.getCenterPoint());
+                OpenCVManager.get().setRefPoint1(new ReferencePoint(referencePoint.getCenterPoint(), new Point(0, 0)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 2:
-                OpenCVManager.get().setRefPoint2(referencePoint.getCenterPoint());
+                OpenCVManager.get().setRefPoint2(new ReferencePoint(referencePoint.getCenterPoint(), new Point(180, 0)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 3:
-                OpenCVManager.get().setRefPoint3(referencePoint.getCenterPoint());
+                OpenCVManager.get().setRefPoint3(new ReferencePoint(referencePoint.getCenterPoint(), new Point(0, 280)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 4:
-                OpenCVManager.get().setRefPoint4(referencePoint.getCenterPoint());
+                OpenCVManager.get().setRefPoint4(new ReferencePoint(referencePoint.getCenterPoint(), new Point(180, 280)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
         }
         return "Failed";
@@ -106,40 +107,52 @@ public class OpenCVUtils {
     }
 
     public static void drawBordToFrame(Mat frame) {
-        Point refPoint1 = OpenCVManager.get().getRefPoint1();
-        Point refPoint2 = OpenCVManager.get().getRefPoint2();
-        Point refPoint3 = OpenCVManager.get().getRefPoint3();
-        Point refPoint4 = OpenCVManager.get().getRefPoint4();
+        ReferencePoint fullRefPoint1 = OpenCVManager.get().getRefPoint1();
+        Point refPoint1 = null;
+        if (fullRefPoint1 != null)
+            refPoint1 = OpenCVManager.get().getRefPoint1().getPointImage();
+        ReferencePoint fullRefPoint2 = OpenCVManager.get().getRefPoint2();
+        Point refPoint2 = null;
+        if (fullRefPoint2 != null)
+            refPoint2 = OpenCVManager.get().getRefPoint2().getPointImage();
+        ReferencePoint fullRefPoint3 = OpenCVManager.get().getRefPoint3();
+        Point refPoint3 = null;
+        if (fullRefPoint3 != null)
+            refPoint3 = OpenCVManager.get().getRefPoint3().getPointImage();
+        ReferencePoint fullRefPoint4 = OpenCVManager.get().getRefPoint4();
+        Point refPoint4 = null;
+        if (fullRefPoint4 != null)
+            refPoint4 = OpenCVManager.get().getRefPoint4().getPointImage();
 
-        if (refPoint1 != null && refPoint2 != null){
+        if (refPoint1 != null && refPoint2 != null) {
             Imgproc.line(frame, refPoint1, refPoint2, new Scalar(225, 0, 0), 3);
         }
-        if (refPoint1 != null && refPoint3 != null){
+        if (refPoint1 != null && refPoint3 != null) {
             Imgproc.line(frame, refPoint1, refPoint3, new Scalar(225, 0, 0), 3);
         }
-        if (refPoint4 != null && refPoint2 != null){
+        if (refPoint4 != null && refPoint2 != null) {
             Imgproc.line(frame, refPoint4, refPoint2, new Scalar(225, 0, 0), 3);
         }
-        if (refPoint3 != null && refPoint4 != null){
+        if (refPoint3 != null && refPoint4 != null) {
             Imgproc.line(frame, refPoint3, refPoint4, new Scalar(225, 0, 0), 3);
         }
 
-        if (refPoint1 != null){
+        if (refPoint1 != null) {
             Imgproc.putText(frame, "1", refPoint1, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
         }
-        if (refPoint2 != null){
+        if (refPoint2 != null) {
             Imgproc.putText(frame, "2", refPoint2, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
         }
-        if (refPoint3 != null){
+        if (refPoint3 != null) {
             Imgproc.putText(frame, "3", refPoint3, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
         }
-        if (refPoint4 != null){
+        if (refPoint4 != null) {
             Imgproc.putText(frame, "4", refPoint4, Core.FONT_HERSHEY_PLAIN, 4, new Scalar(225, 10, 10), 3);
         }
     }
 
     public static void updateDisplayType(int displayType, Mat frame) {
-        switch (displayType){
+        switch (displayType) {
             case DISPLAY_BALLS_IN_RANGE:
                 findInRangeFrame(frame, Const.BALL_SCALAR_MIN, Const.BALL_SCALAR_MAX);
                 break;

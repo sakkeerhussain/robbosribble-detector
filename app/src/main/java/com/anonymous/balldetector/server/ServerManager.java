@@ -3,6 +3,7 @@ package com.anonymous.balldetector.server;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.anonymous.balldetector.models.Circle;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.response.CalibrationValue;
@@ -74,14 +75,25 @@ public class ServerManager {
         Map<String, List<String>> params = session.getParameters();
         String body = session.getQueryParameterString();
         String response;
-        if (uri.startsWith(Const.Calibrate.URI)) {
-            response = processCalibrate(uri.substring(Const.Calibrate.URI.length()), method, params, body).toString();
+        if (uri.startsWith(Const.Balls.URI)) {
+            response = processBalls(uri.substring(Const.Calibrate.URI.length()), method, params, body).toString();
         }else if (uri.startsWith(Const.Stream.URI)) {
             return processStream(uri.substring(Const.Stream.URI.length()), method, params, body);
+        }else if (uri.startsWith(Const.Calibrate.URI)) {
+            response = processCalibrate(uri.substring(Const.Calibrate.URI.length()), method, params, body).toString();
         }else {
             response = new RespError(Const.Error.INVALID_URI).toString();
         }
         return NanoHTTPD.newFixedLengthResponse( response );
+    }
+
+    //Balls methods
+    private RespBase processBalls(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        List<Circle> balls = OpenCVUtils.getBalls(frame);
+        for (Circle ball : balls) {
+        }
+        return new RespSuccess(uri);
     }
 
     //Calibration methods
@@ -109,9 +121,11 @@ public class ServerManager {
         if (uri.startsWith(Const.Calibrate.URI_VALUE)){
             if (method == NanoHTTPD.Method.POST) {
                 try {
-                    float x = Float.valueOf(params.get("x").get(0));
-                    float y = Float.valueOf(params.get("y").get(0));
-                    OpenCVManager.get().setRefPoint(x, y, point);
+                    float xImage = Float.valueOf(params.get("xImage").get(0));
+                    float yImage = Float.valueOf(params.get("yImage").get(0));
+                    float xBoard = Float.valueOf(params.get("xBoard").get(0));
+                    float yBoard = Float.valueOf(params.get("yBoard").get(0));
+                    OpenCVManager.get().setRefPoint(xImage, yImage, xBoard, yBoard, point);
                     return new RespSuccess("Updated");
                 }catch (Exception e){
                     return new RespError(e.getMessage());

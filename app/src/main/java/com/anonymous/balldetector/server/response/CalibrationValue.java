@@ -1,5 +1,6 @@
 package com.anonymous.balldetector.server.response;
 
+import com.anonymous.balldetector.models.ReferencePoint;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 
 import org.opencv.core.Point;
@@ -14,7 +15,7 @@ public class CalibrationValue extends RespSuccess {
 
     public CalibrationValue(int point){
         super("Calibration value");
-        Point value = null;
+        ReferencePoint value = null;
         switch (point){
             case 1:
                 value = OpenCVManager.get().getRefPoint1();
@@ -33,9 +34,9 @@ public class CalibrationValue extends RespSuccess {
     }
 
     private class CalibrationValueData {
-        Point value;
+        ReferencePoint value;
 
-        CalibrationValueData(Point value){
+        CalibrationValueData(ReferencePoint value){
             this.value = value;
         }
     }

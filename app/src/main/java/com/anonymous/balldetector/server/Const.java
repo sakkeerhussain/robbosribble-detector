@@ -1,31 +1,35 @@
 package com.anonymous.balldetector.server;
 
 /**
- * Created by sakkeer on 07/12/17.
+ * Created by Sakkeer Hussain on 07/12/17.
  */
 
 public class Const {
     public static final String SUCCESS = "ok";
 
-    public class Calibrate {
-        public static final String URI = "/calibrate";
-        public static final String URI_REF_POINT = "/ref_point";
-        public static final String URI_1 = "/1";
-        public static final String URI_2 = "/2";
-        public static final String URI_3 = "/3";
-        public static final String URI_4 = "/4";
-        public static final String URI_VALUE = "/value";
+    class Balls {
+        static final String URI = "/balls";
     }
 
-    public class Stream {
-        public static final String URI = "/stream";
-        public static final String URI_RAW = "/raw";
-        public static final String URI_DETECTION = "/detection";
-        public static final String URI_BALL_COLOUR = "/ball-color";
-        public static final String URI_REF_COLOUR = "/ref-color";
-        public static final String URI_IMAGE = "/image";
+    class Calibrate {
+        static final String URI = "/calibrate";
+        static final String URI_REF_POINT = "/ref_point";
+        static final String URI_1 = "/1";
+        static final String URI_2 = "/2";
+        static final String URI_3 = "/3";
+        static final String URI_4 = "/4";
+        static final String URI_VALUE = "/value";
+    }
 
-        public static final String HTML = "<html>\n" +
+    class Stream {
+        static final String URI = "/stream";
+        static final String URI_RAW = "/raw";
+        static final String URI_DETECTION = "/detection";
+        static final String URI_BALL_COLOUR = "/ball-color";
+        static final String URI_REF_COLOUR = "/ref-color";
+        static final String URI_IMAGE = "/image";
+
+        static final String HTML = "<html>\n" +
                 "<head>\n" +
                 "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">\n" +
                 "\t<style type=\"text/css\">\n" +
@@ -57,7 +61,7 @@ public class Const {
 
     public class Error {
         public static final String KEY = "err";
-        public static final String INVALID_URI = "Invalid URI provided";
+        static final String INVALID_URI = "Invalid URI provided";
     }
     public static final String FAV_ICON = "/favicon.ico";
 }

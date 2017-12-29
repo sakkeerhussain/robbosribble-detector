@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.util.Log;
 
 import com.anonymous.balldetector.models.Circle;
+import com.anonymous.balldetector.models.ReferencePoint;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.OpenCVLoader;
@@ -35,20 +36,16 @@ public class OpenCVManager implements Camera.PreviewCallback {
     private Mat mYUVFrame;
     private SurfaceTexture mSurfaceTexture;
 
-    private Point refPoint1;
-    private Point refPoint2;
-    private Point refPoint3;
-    private Point refPoint4;
+    private ReferencePoint refPoint1;
+    private ReferencePoint refPoint2;
+    private ReferencePoint refPoint3;
+    private ReferencePoint refPoint4;
 
     private OpenCVManager() {
-
-        //for testing only
-        refPoint1 = new Point(189.5, 162.5);
-        refPoint2 = new Point(1089.5, 255.5);
-        refPoint3 = new Point(238.5, 753.5);
-        refPoint4 = new Point(1039.5, 788.5);
-        //for testing only
-
+        refPoint1 = new ReferencePoint(100, 100, 0, 0);
+        refPoint2 = new ReferencePoint(1000, 100, 180, 0);
+        refPoint3 = new ReferencePoint(100, 1000, 0, 280);
+        refPoint4 = new ReferencePoint(1000, 1000, 180, 280);
     }
 
     public static OpenCVManager get() {
@@ -144,53 +141,53 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return rgbaFrame;
     }
 
-    public void setRefPoint(float x, float y, int point) {
-        Point value = new Point(x, y);
+    public void setRefPoint(float xImage, float yImage, float xBord, float yBord, int point) {
+        ReferencePoint refPoint = new ReferencePoint(xImage, yImage, xBord, yBord);
         switch (point){
             case 1:
-                OpenCVManager.get().setRefPoint1(value);
+                OpenCVManager.get().setRefPoint1(refPoint);
                 break;
             case 2:
-                OpenCVManager.get().setRefPoint2(value);
+                OpenCVManager.get().setRefPoint2(refPoint);
                 break;
             case 3:
-                OpenCVManager.get().setRefPoint3(value);
+                OpenCVManager.get().setRefPoint3(refPoint);
                 break;
             case 4:
-                OpenCVManager.get().setRefPoint4(value);
+                OpenCVManager.get().setRefPoint4(refPoint);
                 break;
         }
     }
 
-    void setRefPoint1(Point point) {
+    void setRefPoint1(ReferencePoint point) {
         this.refPoint1 = point;
     }
 
-    void setRefPoint2(Point point) {
+    void setRefPoint2(ReferencePoint point) {
         this.refPoint2 = point;
     }
 
-    void setRefPoint3(Point point) {
+    void setRefPoint3(ReferencePoint point) {
         this.refPoint3 = point;
     }
 
-    void setRefPoint4(Point point) {
+    void setRefPoint4(ReferencePoint point) {
         this.refPoint4 = point;
     }
 
-    public Point getRefPoint1() {
+    public ReferencePoint getRefPoint1() {
         return this.refPoint1;
     }
 
-    public Point getRefPoint2() {
+    public ReferencePoint getRefPoint2() {
         return this.refPoint2;
     }
 
-    public Point getRefPoint3() {
+    public ReferencePoint getRefPoint3() {
         return this.refPoint3;
     }
 
-    public Point getRefPoint4() {
+    public ReferencePoint getRefPoint4() {
         return this.refPoint4;
     }
 
@@ -251,7 +248,8 @@ public class OpenCVManager implements Camera.PreviewCallback {
         if (refPoint1 == null || refPoint2 == null || refPoint3 == null || refPoint4 == null) {
             return null;
         }
-        Point[] points = new Point[]{refPoint1, refPoint2, refPoint4, refPoint3};
+        Point[] points = new Point[]{refPoint1.getPointImage(), refPoint2.getPointImage(),
+                refPoint4.getPointImage(), refPoint3.getPointImage()};
         MatOfPoint matOfPoint = new MatOfPoint();
         matOfPoint.fromArray(points);
         return matOfPoint;
