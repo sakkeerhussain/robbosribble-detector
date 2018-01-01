@@ -18,4 +18,14 @@ public class Circle {
     public Point getCenterPoint() {
         return new Point(x, y);
     }
+
+    public void setCenterPoint(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setCenterPoint(Point point) {
+        this.x = point.x;
+        this.y = point.y;
+    }
 }

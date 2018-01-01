@@ -172,4 +172,35 @@ public class OpenCVUtils {
         Imgproc.erode(frame, frame, erodeElement);
         Imgproc.dilate(frame, frame, dilateElement);
     }
+
+    public static List<Circle> getBallsInBoard() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        List<Circle> balls = OpenCVUtils.getBalls(frame);
+        for (Circle ball : balls) {
+            convertPointOnBoard(ball);
+        }
+        return balls;
+    }
+
+    private static void convertPointOnBoard(Circle ball) {
+        Point point = ball.getCenterPoint();
+        ReferencePoint point1 = OpenCVManager.get().getRefPoint1();
+        ReferencePoint point2 = OpenCVManager.get().getRefPoint2();
+        ReferencePoint point3 = OpenCVManager.get().getRefPoint3();
+        //Assumption #1
+        double imageXd = ball.getCenterPoint().x - point1.getPointImage().x;
+        double imageYd = ball.getCenterPoint().y - point1.getPointImage().y;
+
+        double imageXD = point2.getPointImage().x - point1.getPointImage().x;
+        double imageYD = point3.getPointImage().y - point1.getPointImage().y;
+
+        double boardXD = point2.getPointBord().x - point1.getPointBord().x;
+        double boardYD = point3.getPointBord().y - point1.getPointBord().y;
+
+        double x = imageXd * boardXD / imageXD;
+        double y = imageYd * boardYD / imageYD;
+        ball.setCenterPoint(x, y);
+
+        //Assumption #2
+    }
 }

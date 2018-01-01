@@ -3,10 +3,10 @@ package com.anonymous.balldetector.server;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.anonymous.balldetector.models.Circle;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.response.CalibrationValue;
+import com.anonymous.balldetector.server.response.RespBalls;
 import com.anonymous.balldetector.server.response.RespBase;
 import com.anonymous.balldetector.server.response.RespError;
 import com.anonymous.balldetector.server.response.RespSuccess;
@@ -17,7 +17,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +75,7 @@ public class ServerManager {
         String body = session.getQueryParameterString();
         String response;
         if (uri.startsWith(Const.Balls.URI)) {
-            response = processBalls(uri.substring(Const.Calibrate.URI.length()), method, params, body).toString();
+            response = processBalls(uri.substring(Const.Balls.URI.length()), method, params, body).toString();
         }else if (uri.startsWith(Const.Stream.URI)) {
             return processStream(uri.substring(Const.Stream.URI.length()), method, params, body);
         }else if (uri.startsWith(Const.Calibrate.URI)) {
@@ -89,13 +88,7 @@ public class ServerManager {
 
     //Balls methods
     private RespBase processBalls(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
-        Mat frame = OpenCVManager.get().getRGBFrame();
-        List<Circle> balls = new ArrayList<>();
-        List<Circle> yellowCircles = OpenCVUtils.getBalls(frame);
-        for (Circle circle : yellowCircles) {
-            double x = circle.getCenterPoint().x;
-        }
-        return new RespSuccess(uri);
+        return new RespBalls(OpenCVUtils.getBallsInBoard());
     }
 
     //Calibration methods
