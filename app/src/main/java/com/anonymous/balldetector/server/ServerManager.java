@@ -12,12 +12,12 @@ import com.anonymous.balldetector.server.response.RespError;
 import com.anonymous.balldetector.server.response.RespSuccess;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +90,10 @@ public class ServerManager {
     //Balls methods
     private RespBase processBalls(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
         Mat frame = OpenCVManager.get().getRGBFrame();
-        List<Circle> balls = OpenCVUtils.getBalls(frame);
-        for (Circle ball : balls) {
+        List<Circle> balls = new ArrayList<>();
+        List<Circle> yellowCircles = OpenCVUtils.getBalls(frame);
+        for (Circle circle : yellowCircles) {
+            double x = circle.getCenterPoint().x;
         }
         return new RespSuccess(uri);
     }

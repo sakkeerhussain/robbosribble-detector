@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.anonymous.balldetector.models.Circle;
 import com.anonymous.balldetector.models.ReferencePoint;
-
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
