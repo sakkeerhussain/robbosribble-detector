@@ -11,6 +11,10 @@ public class Const {
         static final String URI = "/balls";
     }
 
+    class Bot {
+        static final String URI = "/bot";
+    }
+
     class Calibrate {
         static final String URI = "/calibrate";
         static final String URI_REF_POINT = "/ref_point";

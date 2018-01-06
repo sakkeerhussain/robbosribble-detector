@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.anonymous.balldetector.math.geography.Line;
+import com.anonymous.balldetector.math.geography.Point;
 import com.anonymous.balldetector.models.Circle;
 import com.anonymous.balldetector.models.ReferencePoint;
+import com.anonymous.balldetector.server.response.RespBase;
+import com.anonymous.balldetector.server.response.RespBot;
+import com.anonymous.balldetector.server.response.RespError;
 
 import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -27,12 +31,22 @@ public class OpenCVUtils {
     public static final int DISPLAY_BALLS_IN_RANGE = 1;
     public static final int DISPLAY_REFERENCE_IN_RANGE = 2;
 
-    public static List<Circle> getBalls(@NotNull Mat rgbaFrame) {
+    private static List<Circle> getBalls(@NotNull Mat rgbaFrame) {
         return OpenCVManager.get().detectCircles(rgbaFrame, Const.BALL_SCALAR_MIN, Const.BALL_SCALAR_MAX,
                 Const.BALL_RADIUS_MIN, Const.BALL_RADIUS_MAX);
     }
 
-    public static List<Circle> getRefPoint(@NotNull Mat rgbaFrame) {
+    private static List<Circle> getBotFront(@NotNull Mat rgbaFrame) {
+        return OpenCVManager.get().detectCircles(rgbaFrame, Const.BOT_FRONT_SCALAR_MIN, Const.BOT_FRONT_SCALAR_MAX,
+                Const.BOT_FRONT_RADIUS_MIN, Const.BOT_FRONT_RADIUS_MAX);
+    }
+
+    private static List<Circle> getBotBack(@NotNull Mat rgbaFrame) {
+        return OpenCVManager.get().detectCircles(rgbaFrame, Const.BOT_BACK_SCALAR_MIN, Const.BOT_BACK_SCALAR_MAX,
+                Const.BOT_BACK_RADIUS_MIN, Const.BOT_BACK_RADIUS_MAX);
+    }
+
+    private static List<Circle> getRefPoint(@NotNull Mat rgbaFrame) {
         return OpenCVManager.get().detectCircles(rgbaFrame, Const.REFERENCE_SCALAR_MIN, Const.REFERENCE_SCALAR_MAX,
                 Const.REFERENCE_RADIUS_MIN, Const.REFERENCE_RADIUS_MAX);
     }
@@ -95,34 +109,34 @@ public class OpenCVUtils {
     public static void drawBallsToFrame(Mat frame) {
         List<Circle> balls = OpenCVUtils.getBalls(frame);
         for (Circle ball : balls) {
-            Imgproc.circle(frame, ball.getCenterPoint(), 15, new Scalar(0, 255, 0), 3, 8, 0);
+            Imgproc.circle(frame, ball.getCenterPoint().openCV(), 15, new Scalar(0, 255, 0), 3, 8, 0);
         }
     }
 
     public static void drawRefPointsToFrame(Mat frame) {
         List<Circle> refPoints = OpenCVUtils.getRefPoint(frame);
         for (Circle refPoint : refPoints) {
-            Imgproc.circle(frame, refPoint.getCenterPoint(), 15, new Scalar(0, 0, 255), 3, 8, 0);
+            Imgproc.circle(frame, refPoint.getCenterPoint().openCV(), 15, new Scalar(0, 0, 255), 3, 8, 0);
         }
     }
 
     public static void drawBordToFrame(Mat frame) {
         ReferencePoint fullRefPoint1 = OpenCVManager.get().getRefPoint1();
-        Point refPoint1 = null;
+        org.opencv.core.Point refPoint1 = null;
         if (fullRefPoint1 != null)
-            refPoint1 = OpenCVManager.get().getRefPoint1().getPointImage();
+            refPoint1 = OpenCVManager.get().getRefPoint1().getPointImage().openCV();
         ReferencePoint fullRefPoint2 = OpenCVManager.get().getRefPoint2();
-        Point refPoint2 = null;
+        org.opencv.core.Point refPoint2 = null;
         if (fullRefPoint2 != null)
-            refPoint2 = OpenCVManager.get().getRefPoint2().getPointImage();
+            refPoint2 = OpenCVManager.get().getRefPoint2().getPointImage().openCV();
         ReferencePoint fullRefPoint3 = OpenCVManager.get().getRefPoint3();
-        Point refPoint3 = null;
+        org.opencv.core.Point refPoint3 = null;
         if (fullRefPoint3 != null)
-            refPoint3 = OpenCVManager.get().getRefPoint3().getPointImage();
+            refPoint3 = OpenCVManager.get().getRefPoint3().getPointImage().openCV();
         ReferencePoint fullRefPoint4 = OpenCVManager.get().getRefPoint4();
-        Point refPoint4 = null;
+        org.opencv.core.Point refPoint4 = null;
         if (fullRefPoint4 != null)
-            refPoint4 = OpenCVManager.get().getRefPoint4().getPointImage();
+            refPoint4 = OpenCVManager.get().getRefPoint4().getPointImage().openCV();
 
         if (refPoint1 != null && refPoint2 != null) {
             Imgproc.line(frame, refPoint1, refPoint2, new Scalar(225, 0, 0), 3);
@@ -177,30 +191,67 @@ public class OpenCVUtils {
         Mat frame = OpenCVManager.get().getRGBFrame();
         List<Circle> balls = OpenCVUtils.getBalls(frame);
         for (Circle ball : balls) {
-            convertPointOnBoard(ball);
+            Point boardPoint = convertPointOnBoard(ball.getCenterPoint());
+            ball.setCenterPoint(boardPoint);
         }
         return balls;
     }
 
-    private static void convertPointOnBoard(Circle ball) {
-        Point point = ball.getCenterPoint();
+    private static Point convertPointOnBoard(Point centerPoint) {
         ReferencePoint point1 = OpenCVManager.get().getRefPoint1();
         ReferencePoint point2 = OpenCVManager.get().getRefPoint2();
         ReferencePoint point3 = OpenCVManager.get().getRefPoint3();
         //Assumption #1
-        double imageXd = ball.getCenterPoint().x - point1.getPointImage().x;
-        double imageYd = ball.getCenterPoint().y - point1.getPointImage().y;
+        float imageXd = centerPoint.getX() - point1.getPointImage().getX();
+        float imageYd = centerPoint.getY() - point1.getPointImage().getY();
 
-        double imageXD = point2.getPointImage().x - point1.getPointImage().x;
-        double imageYD = point3.getPointImage().y - point1.getPointImage().y;
+        float imageXD = point2.getPointImage().getX() - point1.getPointImage().getX();
+        float imageYD = point3.getPointImage().getY() - point1.getPointImage().getY();
 
-        double boardXD = point2.getPointBord().x - point1.getPointBord().x;
-        double boardYD = point3.getPointBord().y - point1.getPointBord().y;
+        float boardXD = point2.getPointBord().getX() - point1.getPointBord().getX();
+        float boardYD = point3.getPointBord().getY() - point1.getPointBord().getY();
 
-        double x = imageXd * boardXD / imageXD;
-        double y = imageYd * boardYD / imageYD;
-        ball.setCenterPoint(x, y);
+        float x = imageXd * boardXD / imageXD;
+        float y = imageYd * boardYD / imageYD;
+        return new Point(x, y);
 
         //Assumption #2
+    }
+
+    public static RespBase getBotLocation() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        List<Circle> frontCircles = OpenCVUtils.getBotFront(frame);
+        List<Circle> backCircles = OpenCVUtils.getBotBack(frame);
+        if (frontCircles.size() < 1 || backCircles.size() < 1)
+            return new RespError("Bot not found");
+        Point frontCenter = frontCircles.get(0).getCenterPoint();
+        Point backCenter = frontCircles.get(0).getCenterPoint();
+        Line centerLine = new Line(frontCircles.get(0).getCenterPoint(), backCircles.get(0).getCenterPoint());
+        double centerLineAngle = centerLine.getAngle();
+        double centerLength = centerLine.length() * Const.BOT_LOCATOR_DISTANCE_RATIO;
+        Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerLength);
+        Point fromRight = frontCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_45, centerLength);
+        Point backLeft = backCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_135, centerLength);
+        Point backRight = backCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_135, centerLength);
+        return new RespBot(frontLeft, fromRight, backLeft, backRight);
+    }
+
+    public static void drawBotToFrame(Mat frame) {
+        RespBase location = getBotLocation();
+        Scalar scalar = new Scalar(10, 10, 255);
+        Imgproc.putText(frame, "BOT NOT FOUND", new org.opencv.core.Point(0, 0), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
+
+        if (location instanceof RespBot) {
+            RespBot botLocation = (RespBot) location;
+            Imgproc.line(frame, botLocation.data.frontLeft.openCV(), botLocation.data.frontRight.openCV(), scalar, 3);
+            Imgproc.line(frame, botLocation.data.frontLeft.openCV(), botLocation.data.backLeft.openCV(), scalar, 3);
+            Imgproc.line(frame, botLocation.data.backRight.openCV(), botLocation.data.backLeft.openCV(), scalar, 3);
+            Imgproc.line(frame, botLocation.data.backRight.openCV(), botLocation.data.frontRight.openCV(), scalar, 3);
+
+            Imgproc.putText(frame, "FL", botLocation.data.frontLeft.openCV(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
+            Imgproc.putText(frame, "FR", botLocation.data.frontRight.openCV(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
+            Imgproc.putText(frame, "BL", botLocation.data.backLeft.openCV(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
+            Imgproc.putText(frame, "BR", botLocation.data.backRight.openCV(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
+        }
     }
 }

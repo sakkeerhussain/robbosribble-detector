@@ -1,6 +1,6 @@
 package com.anonymous.balldetector.models;
 
-import org.opencv.core.Point;
+import com.anonymous.balldetector.math.geography.Point;
 
 /**
  * Created by Sakkeer Hussain on 29/12/17.

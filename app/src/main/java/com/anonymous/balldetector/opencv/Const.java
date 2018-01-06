@@ -17,4 +17,20 @@ public class Const {
     public static final int REFERENCE_RADIUS_MAX = 30;
     public static Scalar REFERENCE_SCALAR_MIN = new Scalar(12,72,108);
     public static Scalar REFERENCE_SCALAR_MAX = new Scalar(17,146,180);
+
+    public static final int BOT_FRONT_RADIUS_MIN = 10;
+    public static final int BOT_FRONT_RADIUS_MAX = 30;
+    public static Scalar BOT_FRONT_SCALAR_MIN = new Scalar(12,72,108);
+    public static Scalar BOT_FRONT_SCALAR_MAX = new Scalar(17,146,180);
+
+    public static final int BOT_BACK_RADIUS_MIN = 10;
+    public static final int BOT_BACK_RADIUS_MAX = 30;
+    public static Scalar BOT_BACK_SCALAR_MIN = new Scalar(12,72,108);
+    public static Scalar BOT_BACK_SCALAR_MAX = new Scalar(17,146,180);
+
+    public static final int BOT_LOCATOR_DISTANCE_IN_BETWEEN = 15;
+    public static final double BOT_LOCATOR_DISTANCE_TO_CORNER = 10.61;
+    public static final double BOT_LOCATOR_DISTANCE_RATIO = BOT_LOCATOR_DISTANCE_TO_CORNER/BOT_LOCATOR_DISTANCE_IN_BETWEEN;
+    public static final double BOT_LOCATOR_ANGLE_45 = 0.785398;
+    public static final double BOT_LOCATOR_ANGLE_135 = 2.35619;
 }

@@ -76,6 +76,8 @@ public class ServerManager {
         String response;
         if (uri.startsWith(Const.Balls.URI)) {
             response = processBalls(uri.substring(Const.Balls.URI.length()), method, params, body).toString();
+        }else if (uri.startsWith(Const.Bot.URI)) {
+            response = processBot(uri.substring(Const.Bot.URI.length()), method, params, body).toString();
         }else if (uri.startsWith(Const.Stream.URI)) {
             return processStream(uri.substring(Const.Stream.URI.length()), method, params, body);
         }else if (uri.startsWith(Const.Calibrate.URI)) {
@@ -89,6 +91,11 @@ public class ServerManager {
     //Balls methods
     private RespBase processBalls(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
         return new RespBalls(OpenCVUtils.getBallsInBoard());
+    }
+
+    //Bot methods
+    private RespBase processBot(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
+        return OpenCVUtils.getBotLocation();
     }
 
     //Calibration methods
@@ -180,6 +187,7 @@ public class ServerManager {
         Mat frame = OpenCVManager.get().getRGBFrame();
         OpenCVUtils.drawBallsToFrame(frame);
         OpenCVUtils.drawBordToFrame(frame);
+        OpenCVUtils.drawBotToFrame(frame);
         return getFrameAsStream(frame);
     }
 

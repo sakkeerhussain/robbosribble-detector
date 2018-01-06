@@ -3,8 +3,6 @@ package com.anonymous.balldetector.server.response;
 import com.anonymous.balldetector.models.ReferencePoint;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 
-import org.opencv.core.Point;
-
 /**
  * Created by sakkeer on 07/12/17.
  */
