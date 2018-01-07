@@ -12,7 +12,7 @@ public class Point {
         this.y = y;
     }
 
-    public org.opencv.core.Point openCV() {
+    public org.opencv.core.Point cvPoint() {
         return new org.opencv.core.Point(x, y);
     }
 

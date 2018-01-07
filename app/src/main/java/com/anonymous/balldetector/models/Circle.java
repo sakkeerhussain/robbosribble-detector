@@ -9,14 +9,20 @@ import com.anonymous.balldetector.math.geography.Point;
 public class Circle {
     private float x;
     private float y;
+    private int radius;
 
-    public Circle(float x, float y) {
+    public Circle(float x, float y, int radius) {
         this.x = x;
         this.y = y;
+        this.radius = radius;
     }
 
     public Point getCenterPoint() {
         return new Point(x, y);
+    }
+
+    public int getRadius() {
+        return radius;
     }
 
     public void setCenterPoint(float x, float y) {

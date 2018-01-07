@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anonymous.balldetector.R;
+import com.anonymous.balldetector.math.geography.Point;
 import com.anonymous.balldetector.opencv.OpenCVManager;
 import com.anonymous.balldetector.opencv.OpenCVUtils;
 import com.anonymous.balldetector.server.ServerManager;
@@ -119,7 +120,7 @@ public class CenterColorCalibrationActivity extends BaseActivity {
         }
         Mat frameProc = new Mat();
         Imgproc.cvtColor(frame, frameProc, Imgproc.COLOR_RGB2HSV);
-        Imgproc.circle(frame, new org.opencv.core.Point(frame.rows() / 2, frame.cols() / 2),
+        Imgproc.circle(frame, new Point(frame.rows() / 2, frame.cols() / 2).cvPoint(),
                 12, new Scalar(0, 0, 255), 10, 8, 0);
         double[] point = frameProc.get(frame.rows() / 2, frame.cols() / 2);
         return  "H: "+point[0]+", S: "+point[1]+", V: "+point[2];

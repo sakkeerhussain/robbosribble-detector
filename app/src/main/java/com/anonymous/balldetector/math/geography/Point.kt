@@ -5,7 +5,7 @@
 // */
 //class Point(var x: Float, var y: Float) {
 //
-//        fun openCV(): org.opencv.core.Point {
+//        fun cvPoint(): org.opencv.core.Point {
 //        return org.opencv.core.Point(x.toDouble(), y.toDouble())
 //        }
 //

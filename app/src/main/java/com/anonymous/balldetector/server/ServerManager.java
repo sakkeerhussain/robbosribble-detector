@@ -174,6 +174,27 @@ public class ServerManager {
             } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
                 return getReferenceColourStream();
             }
+        }else if (uri.startsWith(Const.Stream.URI_BOT_FRONT_COLOUR)) {
+            uri = uri.substring(Const.Stream.URI_BOT_FRONT_COLOUR.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getBotFrontColourStream();
+            }
+        }else if (uri.startsWith(Const.Stream.URI_BOT_BACK_COLOUR)) {
+            uri = uri.substring(Const.Stream.URI_BOT_BACK_COLOUR.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getBotBackColourStream();
+            }
+        }else if (uri.startsWith(Const.Stream.URI_BOT_DETECTION)) {
+            uri = uri.substring(Const.Stream.URI_BOT_DETECTION.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+                return getBotDetectionStream();
+            }
         }
         return NanoHTTPD.newFixedLengthResponse(new RespError(Const.Error.INVALID_URI).toString());
     }
@@ -201,6 +222,24 @@ public class ServerManager {
         Mat frame = OpenCVManager.get().getRGBFrame();
         OpenCVUtils.drawRefPointsToFrame(frame);
         OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_REFERENCE_IN_RANGE, frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getBotFrontColourStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_BOT_FRONT_IN_RANGE, frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getBotBackColourStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.updateDisplayType(OpenCVUtils.DISPLAY_BOT_BACK_IN_RANGE, frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getBotDetectionStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.drawBotToFrame(frame);
         return getFrameAsStream(frame);
     }
 

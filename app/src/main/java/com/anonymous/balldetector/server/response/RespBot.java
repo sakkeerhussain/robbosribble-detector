@@ -10,9 +10,9 @@ public class RespBot extends RespSuccess {
 
     public BotData data;
 
-    public RespBot(Point frontLeft, Point frontRight, Point backLeft, Point backRight){
+    public RespBot(Point frontLeft, Point frontRight, Point backLeft, Point backRight, double angle){
         super("Bot location");
-        this.data = new BotData(frontLeft, frontRight, backLeft, backRight);
+        this.data = new BotData(frontLeft, frontRight, backLeft, backRight, angle);
     }
 
     public class BotData {
@@ -20,12 +20,14 @@ public class RespBot extends RespSuccess {
         public Point frontRight;
         public Point backLeft;
         public Point backRight;
+        public double angle;
 
-        BotData(Point frontLeft, Point frontRight, Point backLeft, Point backRight) {
+        BotData(Point frontLeft, Point frontRight, Point backLeft, Point backRight, double angle) {
             this.frontLeft = frontLeft;
             this.frontRight = frontRight;
             this.backLeft = backLeft;
             this.backRight = backRight;
+            this.angle = angle;
         }
     }
 }

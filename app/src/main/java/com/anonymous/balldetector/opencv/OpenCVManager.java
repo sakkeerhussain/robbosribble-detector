@@ -191,7 +191,7 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return this.refPoint4;
     }
 
-    List<Circle> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius) {
+    List<Circle> detectCircles(Mat frame, Scalar minRange, Scalar maxRange, int minRadius, int maxRadius, int minDistance) {
         ArrayList<Circle> circles = new ArrayList<>();
         try {
             Mat frameProc = clipFrame(frame);
@@ -206,16 +206,16 @@ public class OpenCVManager implements Camera.PreviewCallback {
 
             Mat circlesMat = new Mat();
             Imgproc.HoughCircles(frameProc, circlesMat, Imgproc.CV_HOUGH_GRADIENT,
-                    1, 30, 20, 20, minRadius, maxRadius);
+                    1, minDistance, 20, 20, minRadius, maxRadius);
 
             for (int i = 0; i < circlesMat.cols(); i++) {
                 double[] circle = circlesMat.get(0, i);
-                if (frame.get((int) circle[1], (int) circle[0])[0] > 140) {
+                //if (frame.get((int) circle[1], (int) circle[0])[0] > 140) {
                     Point center = new Point((int) circle[0], (int) circle[1]);
                     int radius = (int) circle[2];
                     Log.d(TAG, "Ball detected with radius: " + radius + ", and center at " + center);
-                    circles.add(new Circle((float) circle[0], (float) circle[1]));
-                }
+                    circles.add(new Circle((float) circle[0], (float) circle[1], radius));
+                //}
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,8 +247,8 @@ public class OpenCVManager implements Camera.PreviewCallback {
         if (refPoint1 == null || refPoint2 == null || refPoint3 == null || refPoint4 == null) {
             return null;
         }
-        org.opencv.core.Point[] points = new org.opencv.core.Point[]{refPoint1.getPointImage().openCV(), refPoint2.getPointImage().openCV(),
-                refPoint4.getPointImage().openCV(), refPoint3.getPointImage().openCV()};
+        org.opencv.core.Point[] points = new org.opencv.core.Point[]{refPoint1.getPointImage().cvPoint(), refPoint2.getPointImage().cvPoint(),
+                refPoint4.getPointImage().cvPoint(), refPoint3.getPointImage().cvPoint()};
         MatOfPoint matOfPoint = new MatOfPoint();
         matOfPoint.fromArray(points);
         return matOfPoint;
