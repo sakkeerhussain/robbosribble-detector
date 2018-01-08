@@ -8,26 +8,26 @@ import org.opencv.core.Scalar;
 
 class Const {
 
-    static final int BALL_RADIUS_MIN = 5;
-    static final int BALL_RADIUS_MAX = 30;
-    static final int BALL_MIN_DISTANCE = 30;
+    static final int BALL_RADIUS_MIN = 10;
+    static final int BALL_RADIUS_MAX = 26;
+    static final int BALL_MIN_DISTANCE = 13;
     static Scalar BALL_SCALAR_MIN = new Scalar(20,100,100);
     static Scalar BALL_SCALAR_MAX = new Scalar(35,255,255);
 
     static final int REFERENCE_RADIUS_MIN = 10;
     static final int REFERENCE_RADIUS_MAX = 30;
-    static final int REFERENCE_MIN_DISTANCE = 30;
+    static final int REFERENCE_MIN_DISTANCE = 100;
     static Scalar REFERENCE_SCALAR_MIN = new Scalar(12,72,108);
     static Scalar REFERENCE_SCALAR_MAX = new Scalar(17,146,180);
 
-    static final int BOT_FRONT_RADIUS_MIN = 20;
-    static final int BOT_FRONT_RADIUS_MAX = 50;
+    static final int BOT_FRONT_RADIUS_MIN = 26;
+    static final int BOT_FRONT_RADIUS_MAX = 40;
     static final int BOT_FRONT_MIN_DISTANCE = 500;
     static Scalar BOT_FRONT_SCALAR_MIN = new Scalar(134.0, 149.0, 95.0);
     static Scalar BOT_FRONT_SCALAR_MAX = new Scalar(143.0, 255.0, 255.0);
 
-    static final int BOT_BACK_RADIUS_MIN = 20;
-    static final int BOT_BACK_RADIUS_MAX = 50;
+    static final int BOT_BACK_RADIUS_MIN = 26;
+    static final int BOT_BACK_RADIUS_MAX = 40;
     static final int BOT_BACK_MIN_DISTANCE = 500;
     static Scalar BOT_BACK_SCALAR_MIN = new Scalar(63.0, 96.0, 136.0);
     static Scalar BOT_BACK_SCALAR_MAX = new Scalar(73.0, 183.0, 255.0);
