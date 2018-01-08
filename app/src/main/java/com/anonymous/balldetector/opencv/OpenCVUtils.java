@@ -236,11 +236,11 @@ public class OpenCVUtils {
         Point backCenter = backCircles.get(0).getCenterPoint();
         Line centerLine = new Line(frontCircles.get(0).getCenterPoint(), backCircles.get(0).getCenterPoint());
         double centerLineAngle = centerLine.getAngle();
-        double centerLength = centerLine.length() * Const.BOT_LOCATOR_DISTANCE_RATIO;
-        Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerLength);
-        Point frontRight = frontCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_45, centerLength);
-        Point backLeft = backCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_135, centerLength);
-        Point backRight = backCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_135, centerLength);
+        double centerToCornerLength = centerLine.length() * Const.BOT_LOCATOR_DISTANCE_RATIO;
+        Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength);
+        Point frontRight = frontCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength);
+        Point backLeft = backCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength);
+        Point backRight = backCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength);
         return new RespBot(frontLeft, frontRight, backLeft, backRight, centerLineAngle);
     }
 
