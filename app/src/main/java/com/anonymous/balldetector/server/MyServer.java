@@ -13,7 +13,7 @@ public class MyServer extends NanoHTTPD {
 
     MyServer() throws IOException {
         super(PORT);
-        start();
+        start(10000);
     }
 
     @Override
