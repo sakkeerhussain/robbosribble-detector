@@ -226,8 +226,21 @@ public class OpenCVUtils {
         //Assumption #2
     }
 
-    public static RespBase getBotLocation() {
+    public static RespBase getBotLocationOnBoard() {
+        RespBase location = getBotLocation();
+        if (location instanceof RespBot){
+            RespBot.BotData locationData = ((RespBot) location).data;
+            locationData.backLeft = convertPointOnBoard(locationData.backLeft);
+            locationData.frontLeft = convertPointOnBoard(locationData.frontLeft);
+            locationData.backRight = convertPointOnBoard(locationData.backRight);
+            locationData.frontRight = convertPointOnBoard(locationData.frontRight);
+        }
+        return location;
+    }
+
+    private static RespBase getBotLocation() {
         Mat frame = OpenCVManager.get().getRGBFrame();
+        frame = OpenCVManager.get().clipFrame(frame);
         List<Circle> frontCircles = OpenCVUtils.getBotFront(frame);
         List<Circle> backCircles = OpenCVUtils.getBotBack(frame);
         if (frontCircles.size() < 1 || backCircles.size() < 1)
@@ -266,10 +279,10 @@ public class OpenCVUtils {
             Imgproc.line(frame, botLocation.data.backRight.cvPoint(), botLocation.data.backLeft.cvPoint(), scalar, 3);
             Imgproc.line(frame, botLocation.data.backRight.cvPoint(), botLocation.data.frontRight.cvPoint(), scalar, 3);
 
-            Imgproc.putText(frame, "FL", botLocation.data.frontLeft.cvPoint(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
-            Imgproc.putText(frame, "FR", botLocation.data.frontRight.cvPoint(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
-            Imgproc.putText(frame, "BL", botLocation.data.backLeft.cvPoint(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
-            Imgproc.putText(frame, "BR", botLocation.data.backRight.cvPoint(), Core.FONT_HERSHEY_PLAIN, 4, scalar, 3);
+            Imgproc.putText(frame, "FL", botLocation.data.frontLeft.cvPoint(), Core.FONT_HERSHEY_PLAIN, 2, scalar, 3);
+            Imgproc.putText(frame, "FR", botLocation.data.frontRight.cvPoint(), Core.FONT_HERSHEY_PLAIN, 2, scalar, 3);
+            Imgproc.putText(frame, "BL", botLocation.data.backLeft.cvPoint(), Core.FONT_HERSHEY_PLAIN, 2, scalar, 3);
+            Imgproc.putText(frame, "BR", botLocation.data.backRight.cvPoint(), Core.FONT_HERSHEY_PLAIN, 2, scalar, 3);
         }
     }
 }

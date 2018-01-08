@@ -95,7 +95,7 @@ public class ServerManager {
 
     //Bot methods
     private RespBase processBot(String uri, NanoHTTPD.Method method, Map<String, List<String>> params, String body) {
-        return OpenCVUtils.getBotLocation();
+        return OpenCVUtils.getBotLocationOnBoard();
     }
 
     //Calibration methods

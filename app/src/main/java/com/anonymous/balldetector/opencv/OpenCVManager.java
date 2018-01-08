@@ -223,7 +223,7 @@ public class OpenCVManager implements Camera.PreviewCallback {
         return circles;
     }
 
-    private Mat clipFrame(Mat frame) {
+    Mat clipFrame(Mat frame) {
         Mat frameRes = new Mat();
         MatOfPoint refPoints = OpenCVManager.get().getRefPoints();
         if (refPoints != null) {
