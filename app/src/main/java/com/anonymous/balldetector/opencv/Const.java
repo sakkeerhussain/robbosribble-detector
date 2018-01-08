@@ -21,16 +21,16 @@ class Const {
     static Scalar REFERENCE_SCALAR_MAX = new Scalar(17,146,180);
 
     static final int BOT_FRONT_RADIUS_MIN = 40;
-    static final int BOT_FRONT_RADIUS_MAX = 200;
+    static final int BOT_FRONT_RADIUS_MAX = 150;
     static final int BOT_FRONT_MIN_DISTANCE = 500;
-    static Scalar BOT_FRONT_SCALAR_MIN = new Scalar(142.0, 40.0, 93.0);
-    static Scalar BOT_FRONT_SCALAR_MAX = new Scalar(170.0, 141, 255.0);
+    static Scalar BOT_FRONT_SCALAR_MIN = new Scalar(134.0, 149.0, 95.0);
+    static Scalar BOT_FRONT_SCALAR_MAX = new Scalar(143.0, 255.0, 255.0);
 
     static final int BOT_BACK_RADIUS_MIN = 40;
-    static final int BOT_BACK_RADIUS_MAX = 200;
+    static final int BOT_BACK_RADIUS_MAX = 150;
     static final int BOT_BACK_MIN_DISTANCE = 500;
-    static Scalar BOT_BACK_SCALAR_MIN = new Scalar(92.0, 33.0, 80.0);
-    static Scalar BOT_BACK_SCALAR_MAX = new Scalar(125.0, 101.0, 246.0);
+    static Scalar BOT_BACK_SCALAR_MIN = new Scalar(63.0, 96.0, 136.0);
+    static Scalar BOT_BACK_SCALAR_MAX = new Scalar(73.0, 183.0, 255.0);
 
     private static final int BOT_LOCATOR_DISTANCE_IN_BETWEEN = 15;
     private static final double BOT_LOCATOR_DISTANCE_TO_CORNER = 10.61;
