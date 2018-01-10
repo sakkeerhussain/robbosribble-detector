@@ -29,6 +29,7 @@ public class Const {
         static final String URI = "/stream";
         static final String URI_RAW = "/raw";
         static final String URI_DETECTION = "/detection";
+        static final String URI_BALLS = "/balls";
         static final String URI_BOT_DETECTION = "/bot-location";
         static final String URI_BALL_COLOUR = "/ball-color";
         static final String URI_REF_COLOUR = "/ref-color";
@@ -56,6 +57,7 @@ public class Const {
                 "\t\t<li><a href=\"../bot-location/\">BOT location</a></li>\n" +
                 "\t\t<li><a href=\"../bot-front/\">BOT front color</a></li>\n" +
                 "\t\t<li><a href=\"../bot-back/\">BOT back color</a></li>\n" +
+                "\t\t<li><a href=\"../balls/\">Balls</a></li>\n" +
                 "\t</ul>\n" +
                 "</div>\n" +
                 "<script>\n" +

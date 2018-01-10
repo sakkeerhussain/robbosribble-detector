@@ -61,16 +61,16 @@ public class OpenCVUtils {
         Circle referencePoint = referencePoints.get(0);
         switch (pointNo) {
             case 1:
-                OpenCVManager.get().setRefPoint1(new ReferencePoint(referencePoint.getCenterPoint(), new Point(0, 0)));
+                OpenCVManager.get().setRefPoint1(new ReferencePoint(referencePoint.getCenter(), new Point(0, 0)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 2:
-                OpenCVManager.get().setRefPoint2(new ReferencePoint(referencePoint.getCenterPoint(), new Point(180, 0)));
+                OpenCVManager.get().setRefPoint2(new ReferencePoint(referencePoint.getCenter(), new Point(180, 0)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 3:
-                OpenCVManager.get().setRefPoint3(new ReferencePoint(referencePoint.getCenterPoint(), new Point(0, 280)));
+                OpenCVManager.get().setRefPoint3(new ReferencePoint(referencePoint.getCenter(), new Point(0, 280)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
             case 4:
-                OpenCVManager.get().setRefPoint4(new ReferencePoint(referencePoint.getCenterPoint(), new Point(180, 280)));
+                OpenCVManager.get().setRefPoint4(new ReferencePoint(referencePoint.getCenter(), new Point(180, 280)));
                 return com.anonymous.balldetector.server.Const.SUCCESS;
         }
         return "Failed";
@@ -111,14 +111,14 @@ public class OpenCVUtils {
     public static void drawBallsToFrame(Mat frame) {
         List<Circle> balls = OpenCVUtils.getBalls(frame);
         for (Circle ball : balls) {
-            Imgproc.circle(frame, ball.getCenterPoint().cvPoint(), ball.getRadius(), new Scalar(0, 255, 0), 3, 8, 0);
+            Imgproc.circle(frame, ball.getCenter().cvPoint(), ball.getRadius(), new Scalar(0, 255, 0), 3, 8, 0);
         }
     }
 
     public static void drawRefPointsToFrame(Mat frame) {
         List<Circle> refPoints = OpenCVUtils.getRefPoint(frame);
         for (Circle refPoint : refPoints) {
-            Imgproc.circle(frame, refPoint.getCenterPoint().cvPoint(), refPoint.getRadius(), new Scalar(0, 0, 255), 3, 8, 0);
+            Imgproc.circle(frame, refPoint.getCenter().cvPoint(), refPoint.getRadius(), new Scalar(0, 0, 255), 3, 8, 0);
         }
     }
 
@@ -199,7 +199,7 @@ public class OpenCVUtils {
         Mat frame = OpenCVManager.get().getRGBFrame();
         List<Circle> balls = OpenCVUtils.getBalls(frame);
         for (Circle ball : balls) {
-            Point boardPoint = convertPointOnBoard(ball.getCenterPoint());
+            Point boardPoint = convertPointOnBoard(ball.getCenter());
             ball.setCenterPoint(boardPoint);
         }
         return balls;
@@ -245,9 +245,9 @@ public class OpenCVUtils {
         List<Circle> backCircles = OpenCVUtils.getBotBack(frame);
         if (frontCircles.size() < 1 || backCircles.size() < 1)
             return new RespError("Bot not found");
-        Point frontCenter = frontCircles.get(0).getCenterPoint();
-        Point backCenter = backCircles.get(0).getCenterPoint();
-        Line centerLine = new Line(frontCircles.get(0).getCenterPoint(), backCircles.get(0).getCenterPoint());
+        Point frontCenter = frontCircles.get(0).getCenter();
+        Point backCenter = backCircles.get(0).getCenter();
+        Line centerLine = new Line(frontCircles.get(0).getCenter(), backCircles.get(0).getCenter());
         double centerLineAngle = centerLine.getAngle();
         double centerToCornerLength = centerLine.length() * Const.BOT_LOCATOR_DISTANCE_RATIO;
         Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength);
@@ -261,12 +261,12 @@ public class OpenCVUtils {
         RespBase location = getBotLocation();
         List<Circle> frontCircles = OpenCVUtils.getBotFront(frame);
         for (Circle circle : frontCircles) {
-            Imgproc.circle(frame, circle.getCenterPoint().cvPoint(), circle.getRadius(), new Scalar(221, 21, 246), 3, 8, 0);
+            Imgproc.circle(frame, circle.getCenter().cvPoint(), circle.getRadius(), new Scalar(221, 21, 246), 3, 8, 0);
         }
 
         List<Circle> backCircles = OpenCVUtils.getBotBack(frame);
         for (Circle circle : backCircles) {
-            Imgproc.circle(frame, circle.getCenterPoint().cvPoint(), circle.getRadius(), new Scalar(223, 246, 21), 3, 8, 0);
+            Imgproc.circle(frame, circle.getCenter().cvPoint(), circle.getRadius(), new Scalar(223, 246, 21), 3, 8, 0);
         }
 
         Scalar scalar = new Scalar(10, 10, 255);

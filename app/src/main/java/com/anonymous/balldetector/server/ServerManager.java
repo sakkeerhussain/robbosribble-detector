@@ -70,22 +70,22 @@ public class ServerManager {
     NanoHTTPD.Response processExtRequest(NanoHTTPD.IHTTPSession session) {
         String uri = session.getUri();
         NanoHTTPD.Method method = session.getMethod();
-        Log.d(TAG, "HTTP "+method.name()+" ("+session.getRemoteIpAddress()+") "+uri);
+        Log.d(TAG, "HTTP " + method.name() + " (" + session.getRemoteIpAddress() + ") " + uri);
         Map<String, List<String>> params = session.getParameters();
         String body = session.getQueryParameterString();
         String response;
         if (uri.startsWith(Const.Balls.URI)) {
             response = processBalls(uri.substring(Const.Balls.URI.length()), method, params, body).toString();
-        }else if (uri.startsWith(Const.Bot.URI)) {
+        } else if (uri.startsWith(Const.Bot.URI)) {
             response = processBot(uri.substring(Const.Bot.URI.length()), method, params, body).toString();
-        }else if (uri.startsWith(Const.Stream.URI)) {
+        } else if (uri.startsWith(Const.Stream.URI)) {
             return processStream(uri.substring(Const.Stream.URI.length()), method, params, body);
-        }else if (uri.startsWith(Const.Calibrate.URI)) {
+        } else if (uri.startsWith(Const.Calibrate.URI)) {
             response = processCalibrate(uri.substring(Const.Calibrate.URI.length()), method, params, body).toString();
-        }else {
+        } else {
             response = new RespError(Const.Error.INVALID_URI).toString();
         }
-        return NanoHTTPD.newFixedLengthResponse( response );
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response);
     }
 
     //Balls methods
@@ -120,7 +120,7 @@ public class ServerManager {
     }
 
     private RespBase processCalibration(int point, String uri, NanoHTTPD.Method method, Map<String, List<String>> params) {
-        if (uri.startsWith(Const.Calibrate.URI_VALUE)){
+        if (uri.startsWith(Const.Calibrate.URI_VALUE)) {
             if (method == NanoHTTPD.Method.POST) {
                 try {
                     float xImage = Float.valueOf(params.get("xImage").get(0));
@@ -129,16 +129,16 @@ public class ServerManager {
                     float yBoard = Float.valueOf(params.get("yBoard").get(0));
                     OpenCVManager.get().setRefPoint(xImage, yImage, xBoard, yBoard, point);
                     return new RespSuccess("Updated");
-                }catch (Exception e){
+                } catch (Exception e) {
                     return new RespError(e.getMessage());
                 }
-            }else
+            } else
                 return new CalibrationValue(point);
-        }else {
+        } else {
             String response = OpenCVUtils.updateRefPoints(point);
-            if (response.equals(Const.SUCCESS)){
+            if (response.equals(Const.SUCCESS)) {
                 return new RespSuccess("Configured reference pint.");
-            }else{
+            } else {
                 return new RespError(response);
             }
         }
@@ -150,49 +150,56 @@ public class ServerManager {
             uri = uri.substring(Const.Stream.URI_RAW.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getRawStream();
             }
-        }else if (uri.startsWith(Const.Stream.URI_DETECTION)) {
+        } else if (uri.startsWith(Const.Stream.URI_DETECTION)) {
             uri = uri.substring(Const.Stream.URI_DETECTION.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getDetectionStream();
             }
-        }else if (uri.startsWith(Const.Stream.URI_BALL_COLOUR)) {
+        } else if (uri.startsWith(Const.Stream.URI_BALLS)) {
+            uri = uri.substring(Const.Stream.URI_BALLS.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
+                return getBallsStream();
+            }
+        } else if (uri.startsWith(Const.Stream.URI_BALL_COLOUR)) {
             uri = uri.substring(Const.Stream.URI_BALL_COLOUR.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getBallColourStream();
             }
-        }else if (uri.startsWith(Const.Stream.URI_REF_COLOUR)) {
+        } else if (uri.startsWith(Const.Stream.URI_REF_COLOUR)) {
             uri = uri.substring(Const.Stream.URI_REF_COLOUR.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getReferenceColourStream();
             }
-        }else if (uri.startsWith(Const.Stream.URI_BOT_FRONT_COLOUR)) {
+        } else if (uri.startsWith(Const.Stream.URI_BOT_FRONT_COLOUR)) {
             uri = uri.substring(Const.Stream.URI_BOT_FRONT_COLOUR.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getBotFrontColourStream();
             }
-        }else if (uri.startsWith(Const.Stream.URI_BOT_BACK_COLOUR)) {
+        } else if (uri.startsWith(Const.Stream.URI_BOT_BACK_COLOUR)) {
             uri = uri.substring(Const.Stream.URI_BOT_BACK_COLOUR.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getBotBackColourStream();
             }
-        }else if (uri.startsWith(Const.Stream.URI_BOT_DETECTION)) {
+        } else if (uri.startsWith(Const.Stream.URI_BOT_DETECTION)) {
             uri = uri.substring(Const.Stream.URI_BOT_DETECTION.length());
             if (uri.length() == 0 || uri.equals("/")) {
                 return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
-            } else if (uri.startsWith(Const.Stream.URI_IMAGE)){
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getBotDetectionStream();
             }
         }
@@ -209,6 +216,12 @@ public class ServerManager {
         OpenCVUtils.drawBallsToFrame(frame);
         OpenCVUtils.drawBordToFrame(frame);
         OpenCVUtils.drawBotToFrame(frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getBallsStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.drawBallsToFrame(frame);
         return getFrameAsStream(frame);
     }
 

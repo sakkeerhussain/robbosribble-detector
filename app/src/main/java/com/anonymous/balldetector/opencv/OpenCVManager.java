@@ -143,7 +143,7 @@ public class OpenCVManager implements Camera.PreviewCallback {
 
     public void setRefPoint(float xImage, float yImage, float xBord, float yBord, int point) {
         ReferencePoint refPoint = new ReferencePoint(xImage, yImage, xBord, yBord);
-        switch (point){
+        switch (point) {
             case 1:
                 OpenCVManager.get().setRefPoint1(refPoint);
                 break;
@@ -210,12 +210,10 @@ public class OpenCVManager implements Camera.PreviewCallback {
 
             for (int i = 0; i < circlesMat.cols(); i++) {
                 double[] circle = circlesMat.get(0, i);
-                //if (frame.get((int) circle[1], (int) circle[0])[0] > 140) {
-                    Point center = new Point((int) circle[0], (int) circle[1]);
-                    int radius = (int) circle[2];
-                    Log.d(TAG, "Ball detected with radius: " + radius + ", and center at " + center);
-                    circles.add(new Circle((float) circle[0], (float) circle[1], radius));
-                //}
+                Point center = new Point((int) circle[0], (int) circle[1]);
+                int radius = (int) circle[2];
+                Log.d(TAG, "Ball detected with radius: " + radius + ", and center at " + center);
+                circles.add(new Circle(center, radius));
             }
         } catch (Exception e) {
             e.printStackTrace();

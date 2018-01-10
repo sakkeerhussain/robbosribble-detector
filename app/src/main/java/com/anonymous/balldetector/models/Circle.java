@@ -7,31 +7,23 @@ import com.anonymous.balldetector.math.geography.Point;
  */
 
 public class Circle {
-    private float x;
-    private float y;
+    private Point center;
     private int radius;
 
-    public Circle(float x, float y, int radius) {
-        this.x = x;
-        this.y = y;
+    public Circle(Point point, int radius) {
+        this.center = point;
         this.radius = radius;
     }
 
-    public Point getCenterPoint() {
-        return new Point(x, y);
+    public Point getCenter() {
+        return center;
     }
 
     public int getRadius() {
         return radius;
     }
 
-    public void setCenterPoint(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
     public void setCenterPoint(Point point) {
-        this.x = point.getX();
-        this.y = point.getY();
+        this.center = point;
     }
 }
