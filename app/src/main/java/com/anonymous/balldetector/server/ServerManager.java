@@ -202,6 +202,13 @@ public class ServerManager {
             } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
                 return getBotDetectionStream();
             }
+        } else if (uri.startsWith(Const.Stream.URI_BOARD)) {
+            uri = uri.substring(Const.Stream.URI_BOARD.length());
+            if (uri.length() == 0 || uri.equals("/")) {
+                return NanoHTTPD.newFixedLengthResponse(Const.Stream.HTML);
+            } else if (uri.startsWith(Const.Stream.URI_IMAGE)) {
+                return getBoardStream();
+            }
         }
         return NanoHTTPD.newFixedLengthResponse(new RespError(Const.Error.INVALID_URI).toString());
     }
@@ -253,6 +260,12 @@ public class ServerManager {
     private NanoHTTPD.Response getBotDetectionStream() {
         Mat frame = OpenCVManager.get().getRGBFrame();
         OpenCVUtils.drawBotToFrame(frame);
+        return getFrameAsStream(frame);
+    }
+
+    private NanoHTTPD.Response getBoardStream() {
+        Mat frame = OpenCVManager.get().getRGBFrame();
+        OpenCVUtils.drawBordToFrame(frame);
         return getFrameAsStream(frame);
     }
 
