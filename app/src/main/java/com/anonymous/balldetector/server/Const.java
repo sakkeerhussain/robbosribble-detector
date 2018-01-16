@@ -47,19 +47,19 @@ public class Const {
                 "\t</style>\n" +
                 "</head>\n" +
                 "<body cz-shortcut-listen=\"true\">\n" +
-                "<img src=\"/image/\" width=\"760\" height=\"570\" id=\"image\">\n" +
+                "<img src=\"image/\" width=\"760\" height=\"570\" id=\"image\">\n" +
                 "<div class=\"control\">\n" +
                 "\tFrame Number: <span id=\"frame_seq\">0</span>\n" +
                 "\t<ul>\n" +
-                "\t\t<li><a href=\"/raw/\">Raw</a></li>\n" +
-                "\t\t<li><a href=\"/detection/\">Detection</a></li>\n" +
-                "\t\t<li><a href=\"/ball-color/\">Ball color</a></li>\n" +
-                "\t\t<li><a href=\"/ref-color/\">Reference color</a></li>\n" +
-                "\t\t<li><a href=\"/bot-location/\">BOT location</a></li>\n" +
-                "\t\t<li><a href=\"/bot-front/\">BOT front color</a></li>\n" +
-                "\t\t<li><a href=\"/bot-back/\">BOT back color</a></li>\n" +
-                "\t\t<li><a href=\"/balls/\">Balls</a></li>\n" +
-                "\t\t<li><a href=\"/board/\">Board</a></li>\n" +
+                "\t\t<li><a href=\"raw/\">Raw</a></li>\n" +
+                "\t\t<li><a href=\"detection/\">Detection</a></li>\n" +
+                "\t\t<li><a href=\"ball-color/\">Ball color</a></li>\n" +
+                "\t\t<li><a href=\"ref-color/\">Reference color</a></li>\n" +
+                "\t\t<li><a href=\"bot-location/\">BOT location</a></li>\n" +
+                "\t\t<li><a href=\"bot-front/\">BOT front color</a></li>\n" +
+                "\t\t<li><a href=\"bot-back/\">BOT back color</a></li>\n" +
+                "\t\t<li><a href=\"balls/\">Balls</a></li>\n" +
+                "\t\t<li><a href=\"board/\">Board</a></li>\n" +
                 "\t</ul>\n" +
                 "</div>\n" +
                 "<script>\n" +
@@ -69,7 +69,7 @@ public class Const {
                 "function imageLoaded() {\n" +
                 "\tframe_seq++; \n" +
                 "\tframeSeqElement.innerText = frame_seq\n" +
-                "    myImageElement.src = '/image/?frame_seq=' + frame_seq;\n" +
+                "    myImageElement.src = 'image/?frame_seq=' + frame_seq;\n" +
                 "} \n" +
                 "myImageElement.addEventListener('load', imageLoaded)\n" +
                 "</script>\n" +
