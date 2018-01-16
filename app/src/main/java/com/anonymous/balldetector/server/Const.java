@@ -51,15 +51,15 @@ public class Const {
                 "<div class=\"control\">\n" +
                 "\tFrame Number: <span id=\"frame_seq\">0</span>\n" +
                 "\t<ul>\n" +
-                "\t\t<li><a href=\"raw/\">Raw</a></li>\n" +
-                "\t\t<li><a href=\"detection/\">Detection</a></li>\n" +
-                "\t\t<li><a href=\"ball-color/\">Ball color</a></li>\n" +
-                "\t\t<li><a href=\"ref-color/\">Reference color</a></li>\n" +
-                "\t\t<li><a href=\"bot-location/\">BOT location</a></li>\n" +
-                "\t\t<li><a href=\"bot-front/\">BOT front color</a></li>\n" +
-                "\t\t<li><a href=\"bot-back/\">BOT back color</a></li>\n" +
-                "\t\t<li><a href=\"balls/\">Balls</a></li>\n" +
-                "\t\t<li><a href=\"board/\">Board</a></li>\n" +
+                "\t\t<li><a href=\"../raw/\">Raw</a></li>\n" +
+                "\t\t<li><a href=\"../detection/\">Detection</a></li>\n" +
+                "\t\t<li><a href=\"../ball-color/\">Ball color</a></li>\n" +
+                "\t\t<li><a href=\"../ref-color/\">Reference color</a></li>\n" +
+                "\t\t<li><a href=\"../bot-location/\">BOT location</a></li>\n" +
+                "\t\t<li><a href=\"../bot-front/\">BOT front color</a></li>\n" +
+                "\t\t<li><a href=\"../bot-back/\">BOT back color</a></li>\n" +
+                "\t\t<li><a href=\"../balls/\">Balls</a></li>\n" +
+                "\t\t<li><a href=\"../board/\">Board</a></li>\n" +
                 "\t</ul>\n" +
                 "</div>\n" +
                 "<script>\n" +
