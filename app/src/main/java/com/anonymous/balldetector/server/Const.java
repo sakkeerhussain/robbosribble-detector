@@ -38,9 +38,8 @@ public class Const {
         static final String URI_BOT_BACK_COLOUR = "/bot-back";
         static final String URI_IMAGE = "/image";
 
-        static final String HTML = "<html>\n" +
-                "<head>\n" +
-                "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">\n" +
+        static final String HTML = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">\n" +
+                "\t\n" +
                 "\t<style type=\"text/css\">\n" +
                 "\t\t.control{\n" +
                 "\t\t\tfloat: right;\n" +
@@ -48,29 +47,34 @@ public class Const {
                 "\t</style>\n" +
                 "</head>\n" +
                 "<body cz-shortcut-listen=\"true\">\n" +
-                "<img src=\"image/\" width=\"760\" height=\"570\" id=\"image\">\n" +
+                "<img src=\"http://10.7.170.6:8080/stream/board/image/\" width=\"760\" height=\"570\" id=\"image\">\n" +
                 "<div class=\"control\">\n" +
+                "\tFrame Number: <span id=\"frame_seq\">0</span>\n" +
                 "\t<ul>\n" +
-                "\t\t<li><a href=\"../raw/\">Raw</a></li>\n" +
-                "\t\t<li><a href=\"../detection/\">Detection</a></li>\n" +
-                "\t\t<li><a href=\"../ball-color/\">Ball color</a></li>\n" +
-                "\t\t<li><a href=\"../ref-color/\">Reference color</a></li>\n" +
-                "\t\t<li><a href=\"../bot-location/\">BOT location</a></li>\n" +
-                "\t\t<li><a href=\"../bot-front/\">BOT front color</a></li>\n" +
-                "\t\t<li><a href=\"../bot-back/\">BOT back color</a></li>\n" +
-                "\t\t<li><a href=\"../balls/\">Balls</a></li>\n" +
-                "\t\t<li><a href=\"../board/\">Board</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/raw/\">Raw</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/detection/\">Detection</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/ball-color/\">Ball color</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/ref-color/\">Reference color</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/bot-location/\">BOT location</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/bot-front/\">BOT front color</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/bot-back/\">BOT back color</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/balls/\">Balls</a></li>\n" +
+                "\t\t<li><a href=\"http://10.7.170.6:8080/stream/board/\">Board</a></li>\n" +
                 "\t</ul>\n" +
                 "</div>\n" +
                 "<script>\n" +
                 "var myImageElement = document.getElementById('image');\n" +
+                "var frameSeqElement = document.getElementById('frame_seq');\n" +
+                "var frame_seq = 0;\n" +
                 "function imageLoaded() {\n" +
-                "    myImageElement.src = 'image/?rand=' + Math.random();\n" +
+                "\tframe_seq++; \n" +
+                "\tframeSeqElement.innerText = frame_seq\n" +
+                "    myImageElement.src = 'http://10.7.170.6:8080/stream/board/image/?frame_seq=' + frame_seq;\n" +
                 "} \n" +
                 "myImageElement.addEventListener('load', imageLoaded)\n" +
                 "</script>\n" +
-                "</body>\n" +
-                "</html>";
+                "\n" +
+                "</body></html>";
     }
 
     public class Error {
