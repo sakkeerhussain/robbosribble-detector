@@ -6,7 +6,7 @@ import org.opencv.core.Scalar;
  * Created by sakkeer on 12/12/17.
  */
 
-class Const {
+public class Const {
 
     static final int BALL_RADIUS_MIN = 10;
     static final int BALL_RADIUS_MAX = 26;
@@ -34,7 +34,7 @@ class Const {
 
     private static final int BOT_LOCATOR_DISTANCE_IN_BETWEEN = 15;
     private static final double BOT_LOCATOR_DISTANCE_TO_CORNER = 10.61;
-    static final double BOT_LOCATOR_DISTANCE_RATIO = BOT_LOCATOR_DISTANCE_TO_CORNER/BOT_LOCATOR_DISTANCE_IN_BETWEEN;
-    static final double BOT_LOCATOR_ANGLE_45 = 0.785398;
-    static final double BOT_LOCATOR_ANGLE_135 = 2.35619;
+    public static final double BOT_LOCATOR_DISTANCE_RATIO = BOT_LOCATOR_DISTANCE_TO_CORNER/BOT_LOCATOR_DISTANCE_IN_BETWEEN;
+    public static final double BOT_LOCATOR_ANGLE_45 = 0.785398;
+    public static final double BOT_LOCATOR_ANGLE_135 = 2.35619;
 }

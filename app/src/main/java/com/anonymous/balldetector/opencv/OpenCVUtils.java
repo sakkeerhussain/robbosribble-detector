@@ -247,7 +247,7 @@ public class OpenCVUtils {
             return new RespError("Bot not found");
         Point frontCenter = frontCircles.get(0).getCenter();
         Point backCenter = backCircles.get(0).getCenter();
-        Line centerLine = new Line(frontCircles.get(0).getCenter(), backCircles.get(0).getCenter());
+        Line centerLine = new Line(frontCenter, backCenter);
         double centerLineAngle = centerLine.getAngle();
         double centerToCornerLength = centerLine.length() * Const.BOT_LOCATOR_DISTANCE_RATIO;
         Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength);
