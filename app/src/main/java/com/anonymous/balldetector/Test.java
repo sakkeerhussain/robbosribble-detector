@@ -16,14 +16,20 @@ public class Test {
         Point frontCenter = new Point(3f, 64f);
         Point backCenter = new Point(72f, 70f);
         Line centerLine = new Line(frontCenter, backCenter);
+        boolean highest = true;
+        if (frontCenter.getX() < backCenter.getX())
+            highest = false;
         double centerLineAngle = centerLine.getAngle();
         double centerToCornerLength = centerLine.length() * Const.BOT_LOCATOR_DISTANCE_RATIO;
-        Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength);
-        Point frontRight = frontCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength);
-        Point backLeft = backCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength);
-        Point backRight = backCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength);
+        Point frontLeft = frontCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength, highest);
+        Point frontRight = frontCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength, highest);
+        Point backLeft = backCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength, highest);
+        Point backRight = backCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength, highest);
 
         System.out.println("FL: "+frontLeft);
+        System.out.println("FR: "+frontRight);
+        System.out.println("BL: "+backLeft);
+        System.out.println("BR: "+backRight);
     }
 
 }
