@@ -42,10 +42,10 @@ public class OpenCVManager implements Camera.PreviewCallback {
     private ReferencePoint refPoint4;
 
     private OpenCVManager() {
-        refPoint1 = new ReferencePoint(35, 55, 0, 0);
-        refPoint2 = new ReferencePoint(1210, 55, 280, 0);
-        refPoint3 = new ReferencePoint(35, 830, 0, 180);
-        refPoint4 = new ReferencePoint(1210, 830, 280, 180);
+        refPoint1 = new ReferencePoint(0, 0, -10, -10);
+        refPoint2 = new ReferencePoint(1245, 25, 290, -10);
+        refPoint3 = new ReferencePoint(0, 865, -10, 190);
+        refPoint4 = new ReferencePoint(1245, 840, 290, 190);
     }
 
     public static OpenCVManager get() {

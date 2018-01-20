@@ -221,6 +221,10 @@ public class OpenCVUtils {
 
         float x = imageXd * boardXD / imageXD;
         float y = imageYd * boardYD / imageYD;
+
+        x = x + point1.getPointBord().getX();
+        y = y + point1.getPointBord().getY();
+
         return new Point(x, y);
 
         //Assumption #2
