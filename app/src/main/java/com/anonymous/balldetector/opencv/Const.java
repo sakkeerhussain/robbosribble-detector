@@ -23,8 +23,8 @@ public class Const {
     static final int BOT_FRONT_RADIUS_MIN = 26;
     static final int BOT_FRONT_RADIUS_MAX = 100;
     static final int BOT_FRONT_MIN_DISTANCE = 500;
-    static Scalar BOT_FRONT_SCALAR_MIN = new Scalar(134.0, 149.0, 95.0);
-    static Scalar BOT_FRONT_SCALAR_MAX = new Scalar(143.0, 255.0, 255.0);
+    static Scalar BOT_FRONT_SCALAR_MIN = new Scalar(147.0, 169.0, 118.0);
+    static Scalar BOT_FRONT_SCALAR_MAX = new Scalar(155.0, 215.0, 136.0);
 
     static final int BOT_BACK_RADIUS_MIN = 26;
     static final int BOT_BACK_RADIUS_MAX = 100;
