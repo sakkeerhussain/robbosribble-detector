@@ -52,9 +52,11 @@ public class ServerManager {
 
     //methods
     public void startServer() {
-        Log.d(TAG, "Starting server");
         try {
-            server.start();
+            if (!server.isAlive()) {
+                Log.d(TAG, "Starting server");
+                server.start();
+            }
         } catch (IOException ignored) {
         }
 

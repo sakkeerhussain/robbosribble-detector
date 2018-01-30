@@ -2,6 +2,7 @@ package com.anonymous.balldetector.opencv;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.anonymous.balldetector.math.geography.Line;
@@ -19,6 +20,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -243,6 +245,7 @@ public class OpenCVUtils {
     }
 
     private static RespBase getBotLocation() {
+        long startTime = new Date().getTime();
         Mat frame = OpenCVManager.get().getRGBFrame();
         frame = OpenCVManager.get().clipFrame(frame);
         List<Circle> frontCircles = OpenCVUtils.getBotFront(frame);
@@ -261,6 +264,7 @@ public class OpenCVUtils {
         Point frontRight = frontCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_45, centerToCornerLength, highest);
         Point backLeft = backCenter.getAngledPoint(centerLineAngle + Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength, highest);
         Point backRight = backCenter.getAngledPoint(centerLineAngle - Const.BOT_LOCATOR_ANGLE_135, centerToCornerLength, highest);
+        Log.i("Bot detection", "Time taken to detect bot: "+(new Date().getTime()-startTime)+"ms");
         return new RespBot(frontLeft, frontRight, backLeft, backRight, centerLineAngle);
     }
 
